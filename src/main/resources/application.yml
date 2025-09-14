@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/military
+    username: root
+    password: MyNewPassword123!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create # or create / create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+military:
+  api:
+    status:   # 지원현황 API (15031295)
+      base-url: "https://apis.data.go.kr/1300000/mmaStatus"  # 실제 엔드포인트 경로
+      service-key: ${MMA_STATUS_KEY}                         # 환경변수에서 주입
+      timeout-ms: 5000
+    requirement:  # 특기조건 API (3066750)
+      base-url: "https://apis.data.go.kr/1300000/mmaRequirement"
+      service-key: ${MMA_REQUIREMENT_KEY}
+      timeout-ms: 5000
