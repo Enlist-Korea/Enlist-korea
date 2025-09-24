@@ -35,4 +35,6 @@ public class Specialty {
     @Column(nullable = false)
     private OffsetDateTime updatedAt;
 
+    private boolean isActive;
+
 }

@@ -17,6 +17,7 @@ public class RecruitmentController {
 
     private final RecruitmentService recruitmentService;
 
+    //모집중인 병과 조회
     @GetMapping("/available")
     public ResponseEntity<List<Recruitment>> getAvailableRecruitments() {
         List<Recruitment> result = recruitmentService.getCurrentlyOpenRecruitments();
