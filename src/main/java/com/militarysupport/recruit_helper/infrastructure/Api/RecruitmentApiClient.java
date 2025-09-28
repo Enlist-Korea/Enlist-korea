@@ -3,6 +3,7 @@ package com.militarysupport.recruit_helper.infrastructure.Api;
 import com.militarysupport.recruit_helper.config.MilitaryApiProperties;
 import com.militarysupport.recruit_helper.domain.Recruitment;
 import com.militarysupport.recruit_helper.domain.Requirement;
+import com.militarysupport.recruit_helper.dto.RequirementApiDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,7 +42,7 @@ public class RecruitmentApiClient {
                     .retrieve()
                     .bodyToFlux(Recruitment.class)
                     .collectList()
-                    .block(); // <-- Mono 결과를 동기적으로 기다립니다.
+                    .block();
         } catch (WebClientException e) {
             log.warn("Failed to fetch currently open recruitments: {}", e.getMessage());
             return Collections.emptyList(); // 오류 발생 시 빈 리스트 반환
@@ -49,7 +50,7 @@ public class RecruitmentApiClient {
     }
 
     // 모집 조건을 동기적으로 조회합니다.
-    public List<Requirement> fetchRecruitmentRequirements() {
+    public List<RequirementApiDto> fetchRecruitmentRequirements() {
         try {
             return requirementWebClient.get()
                     .uri(uriBuilder -> uriBuilder
@@ -57,12 +58,14 @@ public class RecruitmentApiClient {
                             .queryParam("someParam", "value")
                             .build())
                     .retrieve()
-                    .bodyToFlux(Requirement.class)
+                    // [수정] bodyToFlux의 타입을 RequirementApiDto.class로 변경합니다.
+                    .bodyToFlux(RequirementApiDto.class)
                     .collectList()
-                    .block(); // <-- Mono 결과를 동기적으로 기다립니다.
+                    .block();
         } catch (WebClientException e) {
             log.warn("Failed to fetch recruitment requirements: {}", e.getMessage());
-            return Collections.emptyList(); // 오류 발생 시 빈 리스트 반환
+            // [수정] 반환 타입을 List<RequirementApiDto>에 맞게 변경합니다.
+            return Collections.emptyList();
         }
     }
 }
