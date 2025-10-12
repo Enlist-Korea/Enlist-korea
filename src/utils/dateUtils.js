@@ -3,11 +3,19 @@
  * 모집 시작일과 종료일을 기준으로 현재 모집 상태(모집중, 모집마감, 모집예정)를 계산.
  */
 
+// 날짜 값을 YYYYMMDD 형식의 문자열로 변환하는 함수
+const getDataString = (dateValue) => {
+  if (!dateValue) return null;
+  const dateStr = String(dateValue);
+  if (dateStr.length !== 8) return null;
+
+  return dateStr;
+};
+
 /** YYYYMMDD 형식의 값을 'YYYY.MM.DD' 형식으로 변환 */
 export const formatDate = (dateValue) => {
-  if (!dateValue) return "날짜 정보 없음";
-  const dateStr = String(dateValue);
-  if (dateStr.length !== 8) return "날짜 정보 없음";
+  const dateStr = getDataString(dateValue);
+  if (!dateStr) return "날짜 정보 없음";
 
   const year = dateStr.substring(0, 4);
   const month = dateStr.substring(4, 6);
@@ -29,7 +37,7 @@ export const formatYearMonth = (yearMonthValue) => {
 
 /** 날짜 값을 유효한 Date 객체로 변환. 실패 시 null 반환 */
 const parseDate = (dateValue) => {
-  if (!dateValue) return null;
+  if (!dateValue) return null; // 비어있는 값인지 먼저 확인 후, 비어있으면 null 반환
   const dateStr = String(dateValue);
   if (dateStr.length !== 8) return null;
 
