@@ -1,0 +1,35 @@
+@startuml EnlistKoreaSequence
+participant User as user
+box "Frontend" #lightgrey
+    participant "App.jsx" as app
+    participant "ListPage.jsx" as listpage
+    participant "Card.jsx" as card
+end box
+
+box "Backend" #lightblue
+    participant "Backend Server" as backend
+end box
+
+database "Database" as db
+
+' 1. 사용자 상호작용 및 데이터 요청
+user -> listpage: 1. 특기명 검색 및 필터링
+listpage -> backend: 2. 모집 공고 데이터 요청 (fetch)
+
+' 2. 백엔드와 데이터베이스 상호작용 (개선 예정 시스템)
+backend -> db: 3. 데이터 조회
+db --> backend: 4. 조회 결과 응답
+
+' 3. 데이터 응답 및 컴포넌트 렌더링
+backend --> listpage: 5. 모집 공고 데이터 응답
+listpage -> card: 6. 각 아이템 데이터를 props로 전달
+activate card
+card -> listpage: 7. 렌더링된 카드 표시
+deactivate card
+
+' 4. 라우팅 흐름
+user -> card: 8. "자세히 보기" 버튼 클릭
+card -> app: 9. 상세 페이지 라우팅 요청 (/details/:id)
+app -> user: 10. DetailPage 렌더링
+
+@enduml
