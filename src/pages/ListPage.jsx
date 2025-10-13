@@ -235,7 +235,7 @@ export const ListPage = () => {
             className="reset-btn"
             onClick={handleReset}
           >
-            🔄 초기화{" "}
+            초기화{" "}
           </button>{" "}
         </div>{" "}
       </div>{" "}
@@ -247,9 +247,6 @@ export const ListPage = () => {
             있습니다.{" "}
           </span>
         )}{" "}
-        <span className="refresh-btn" onClick={loadData}>
-          🔃 새로고침{" "}
-        </span>{" "}
       </div>
       <main>{renderContent()}</main>{" "}
     </div>
