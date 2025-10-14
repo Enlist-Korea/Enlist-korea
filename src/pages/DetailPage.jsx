@@ -1,180 +1,62 @@
-// --- import ---
-import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
-import { Loader } from "../components/Loader";
 import {
-  formatDate,
-  formatYearMonth,
-} from "../utils/dateUtils";
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
+import { useState, useEffect } from "react";
 
-// TODO: DetailPage 컴포넌트는 현재 임시 목업 데이터 사용중!!
-// 추후 병과 별 간단 정보를 AI API를 사용하여 출력 예정
-const mockAllItems = [
-  {
-    id: "1",
-    rnum: "1",
-    gunGbnm: "육군",
-    mojipGbnm: "기술행정병",
-    gsteukgiNm: "포병레이더",
-    jeopsuSjdtm: "20250529",
-    jeopsuJrdtm: "20250604",
-    seonbalPcnt: "2",
-    jeopsuPcnt: "2",
-    rate: "1",
-    iyyjsijakYm: "202509",
-    ipyeongDe: "*",
-  },
-  {
-    id: "2",
-    rnum: "2",
-    gunGbnm: "육군",
-    mojipGbnm: "기술행정병",
-    gsteukgiNm: "군사정보",
-    jeopsuSjdtm: "20250529",
-    jeopsuJrdtm: "20250604",
-    seonbalPcnt: "14",
-    jeopsuPcnt: "32",
-    rate: "2.3",
-    iyyjsijakYm: "202509",
-    ipyeongDe: "*",
-  },
-];
+// 1. 우리가 만든 JSON 파일을 직접 import
+import armyData from "../const/armyData.json";
 
-export const DetailPage = () => {
+export default function DetailPage() {
   const { id } = useParams();
-  const [item, setItem] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const name = searchParams.get("name") || "특기 정보";
+
+  const [html, setHtml] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const findItem = () => {
-      const foundItem =
-        mockAllItems.find((d) => d.id === id) || null;
-      setTimeout(() => {
-        setItem(foundItem);
-        setIsLoading(false);
-      }, 500);
-    };
-    findItem();
-  }, [id]);
+    setLoading(true);
 
-  if (isLoading) {
-    return (
-      <div
-        style={{
-          minHeight: "80vh",
-          display: "grid",
-          placeContent: "center",
-        }}
-      >
-        <Loader />
-      </div>
+    // 2. armyData 배열에서 URL의 id와 일치하는 항목을 찾음
+    const specialty = armyData.find(
+      (item) => item.id === id,
     );
-  }
 
-  if (!item) {
-    return (
-      <div className="page-container">
-        <p>해당 모집병 정보를 찾을 수 없습니다.</p>
-        <Link
-          to="/"
-          className="apply-button"
-          style={{ maxWidth: "200px", marginTop: "1rem" }}
-        >
-          목록으로 돌아가기
-        </Link>
-      </div>
-    );
-  }
+    if (specialty) {
+      // 3. 찾았으면 그 항목의 detailHtml 값을 html 상태로 설정
+      setHtml(specialty.detailHtml);
+    } else {
+      // 못 찾았으면 에러 메시지 설정
+      setHtml(
+        `<p style="color:red;">ID ${id}에 해당하는 정보를 찾을 수 없습니다.</p>`,
+      );
+    }
 
-  const enlistmentMonth =
-    item.ipyeongDe && item.ipyeongDe !== "*"
-      ? item.ipyeongDe
-      : item.iyyjsijakYm;
+    setLoading(false);
+  }, [id]); // id가 바뀔 때마다 이 로직을 다시 실행
 
   return (
-    <div className="page-container">
-      <header
-        className="page-header"
-        style={{
-          textAlign: "left",
-          marginBottom: "1.5rem",
-        }}
+    <div style={{ padding: "2rem" }}>
+      <h1
+        style={{ fontSize: "1.5rem", marginBottom: "1rem" }}
       >
-        <h1>모집병 상세 정보</h1>
-      </header>
-      <div
-        className="card details-card"
-        style={{
-          maxWidth: "1200px",
-          backgroundColor: "var(--card-bg-color)",
-        }}
-      >
-        <div className="card-header">
-          <div className="card-title">
-            <h3>
-              {item.gunGbnm} {item.gsteukgiNm}
-            </h3>
-            <p>{item.mojipGbnm}</p>
-          </div>
-        </div>
-        <div className="card-body">
-          <div className="info-grid">
-            <InfoItem
-              icon="👤"
-              label="선발인원"
-              value={`${item.seonbalPcnt}명`}
-            />
-            <InfoItem
-              icon="✅"
-              label="접수인원"
-              value={`${item.jeopsuPcnt}명`}
-            />
-            <InfoItem
-              icon="📊"
-              label="경쟁률"
-              value={item.rate}
-            />
-            <InfoItem
-              icon="📅"
-              label="입영예정"
-              value={formatYearMonth(enlistmentMonth)}
-            />
-            <div className="info-item full-width">
-              <span className="icon">🕒</span>
-              <div>
-                <div className="label">접수기간</div>
-                <div className="value">
-                  {formatDate(item.jeopsuSjdtm)} ~{" "}
-                  {formatDate(item.jeopsuJrdtm)}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        {name} ({id})
+      </h1>
+      {loading ? (
+        <p>데이터를 불러오는 중입니다...</p>
+      ) : (
         <div
-          className="card-footer"
-          style={{ backgroundColor: "transparent" }}
-        >
-          <Link to="/" className="apply-button">
-            목록으로 돌아가기
-          </Link>
-        </div>
-      </div>
+          style={{
+            background: "#fff",
+            color: "#000",
+            borderRadius: "8px",
+            padding: "1.5rem",
+            overflowX: "auto",
+          }}
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      )}
     </div>
   );
-};
-
-const InfoItem = ({
-  icon,
-  label,
-  value,
-  className = "",
-}) => (
-  <div className={`info-item ${className}`}>
-    <span className="icon">{icon}</span>
-    <div>
-      <div className="label">{label}</div>
-      <div className="value">{value}</div>
-    </div>
-  </div>
-);
+}

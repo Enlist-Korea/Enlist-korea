@@ -1,4 +1,5 @@
-// --- import ---
+// src/components/Card.jsx
+
 import { Link } from "react-router-dom";
 import {
   formatDate,
@@ -6,11 +7,19 @@ import {
   formatYearMonth,
 } from "../utils/dateUtils";
 
-/*
- * 단일 모집 공고 데이터를 시작적으로 표현하는 컴포넌트
- * props로 받은 item 데이터를 dateUtils 함수를 이용하여 가공 후 보여줌
- * LInk 컴포넌트를 통해 사용자가 클릭하면 상세 페이지로 이동하는 네비게이션 기능 제공
- */
+// ⭐️ 1단계: 텍스트를 코드로 번역해줄 '명단(MAP)' 객체 만들기
+const GUN_CODE_MAP = {
+  육군: "1",
+  해군: "2",
+  공군: "3",
+  해병대: "4",
+};
+
+const MOJIP_CODE_MAP = {
+  기술행정병: "1",
+  // 만약 API 데이터에 '전문특기병' 같은 다른 모집 구분이 있다면 여기에 추가
+  // 예: '전문특기병': '2'
+};
 
 const parseRate = (rateStr) => {
   if (!rateStr) return 0;
@@ -31,12 +40,8 @@ export const Card = ({ item }) => {
   );
 
   const getTagClassName = () => {
-    if (statusText === "모집중") {
-      return "recruiting";
-    }
-    if (statusText === "모집마감") {
-      return "finished";
-    }
+    if (statusText === "모집중") return "recruiting";
+    if (statusText === "모집마감") return "finished";
     return "upcoming";
   };
 
@@ -60,9 +65,7 @@ export const Card = ({ item }) => {
             {statusText}
           </span>
         </div>
-
         <h3 className="card-title">{item.gsteukgiNm}</h3>
-
         <div className="card-body">
           <div className="key-stats">
             <div className="stat-item">
@@ -105,11 +108,11 @@ export const Card = ({ item }) => {
             />
           </div>
         </div>
-
         <div className="card-footer">
+          {/* ⭐️ 3단계: 조회한 코드를 URL에 담아서 전달하기 */}
           <Link
-            to={`/details/${item.id}`}
             className="apply-button"
+            to={`/details/${item.gsteukgiCd}?name=${item.gsteukgiNm}`}
           >
             자세히 보기
           </Link>
