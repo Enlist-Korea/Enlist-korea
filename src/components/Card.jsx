@@ -1,5 +1,3 @@
-// src/components/Card.jsx
-
 import { Link } from "react-router-dom";
 import {
   formatDate,
@@ -7,7 +5,7 @@ import {
   formatYearMonth,
 } from "../utils/dateUtils";
 
-// ⭐️ 1단계: 텍스트를 코드로 번역해줄 '명단(MAP)' 객체 만들기
+// 텍스트를 코드로 번역해줄 명단(MAP) 객체 생성
 const GUN_CODE_MAP = {
   육군: "1",
   해군: "2",
@@ -15,9 +13,9 @@ const GUN_CODE_MAP = {
   해병대: "4",
 };
 
+// 만약 API 데이터에 '전문특기병' 같은 다른 모집 구분이 있다면 여기에 추가
 const MOJIP_CODE_MAP = {
   기술행정병: "1",
-  // 만약 API 데이터에 '전문특기병' 같은 다른 모집 구분이 있다면 여기에 추가
   // 예: '전문특기병': '2'
 };
 
@@ -109,10 +107,14 @@ export const Card = ({ item }) => {
           </div>
         </div>
         <div className="card-footer">
-          {/* ⭐️ 3단계: 조회한 코드를 URL에 담아서 전달하기 */}
+          {/* 조회한 코드를 URL에 담아서 전달 */}
           <Link
             className="apply-button"
-            to={`/details/${item.gsteukgiCd}?name=${item.gsteukgiNm}`}
+            to={`/details/${item.gsteukgiCd}?name=${
+              item.gsteukgiNm
+            }&gun=${GUN_CODE_MAP[item.gunGbnm]}&mojip=${
+              MOJIP_CODE_MAP[item.mojipGbnm]
+            }`}
           >
             자세히 보기
           </Link>

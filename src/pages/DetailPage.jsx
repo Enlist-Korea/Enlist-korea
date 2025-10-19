@@ -3,9 +3,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
-
-// 1. 우리가 만든 JSON 파일을 직접 import
-import armyData from "../const/armyData.json";
+import mmaData from "../data/mmaData.json"; // ✅ 로컬 JSON 불러오기
 
 export default function DetailPage() {
   const { id } = useParams();
@@ -18,23 +16,21 @@ export default function DetailPage() {
   useEffect(() => {
     setLoading(true);
 
-    // 2. armyData 배열에서 URL의 id와 일치하는 항목을 찾음
-    const specialty = armyData.find(
+    // 로컬 JSON에서 id 일치하는 데이터 찾기
+    const specialty = mmaData.find(
       (item) => item.id === id,
     );
 
     if (specialty) {
-      // 3. 찾았으면 그 항목의 detailHtml 값을 html 상태로 설정
-      setHtml(specialty.detailHtml);
+      setHtml(specialty.html);
     } else {
-      // 못 찾았으면 에러 메시지 설정
       setHtml(
-        `<p style="color:red;">ID ${id}에 해당하는 정보를 찾을 수 없습니다.</p>`,
+        `<p style="color:red;"> ID ${id} 에 해당하는 캐시된 데이터가 없습니다.</p>`,
       );
     }
 
     setLoading(false);
-  }, [id]); // id가 바뀔 때마다 이 로직을 다시 실행
+  }, [id]);
 
   return (
     <div style={{ padding: "2rem" }}>
@@ -43,13 +39,14 @@ export default function DetailPage() {
       >
         {name} ({id})
       </h1>
+
       {loading ? (
-        <p>데이터를 불러오는 중입니다...</p>
+        <p>불러오는 중...</p>
       ) : (
         <div
           style={{
-            background: "#fff",
-            color: "#000",
+            background: "#121212",
+            color: "#FFFFFF",
             borderRadius: "8px",
             padding: "1.5rem",
             overflowX: "auto",
