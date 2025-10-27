@@ -1,13 +1,16 @@
 name: CI
- /* 이 브랜치에 커밋을 푸시할 때마다 빌드가 자동으로 돕니다. (머지 필요 X) */
+
+# 이 브랜치에 커밋(또는 PR/수동 실행)할 때마다 Gradle 빌드/테스트가 실행됩니다.
 on:
   push:
     branches: [ "*" ]
   pull_request:
+  workflow_dispatch:  # 수동 실행 버튼 활성화
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
 
@@ -23,3 +26,5 @@ jobs:
 
       - name: Build & Test
         run: ./gradlew clean build --stacktrace
+        # 만약 gradlew가 없으면 아래처럼 wrapper 생성 후 빌드로 교체하세요:
+        # run: ./gradlew clean build --stacktrace || (./gradlew wrapper && ./gradlew clean build --stacktrace)
