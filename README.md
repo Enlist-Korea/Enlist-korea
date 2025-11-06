@@ -25,7 +25,40 @@ npm run dev
 
 ## 폴더 구조
 
-![alt text](folder_structure.png)
+```bash
+Enlist-Korea
+├─ eslint.config.js
+├─ folder_structure.png
+├─ index.html
+├─ package-lock.json
+├─ package.json
+├─ README.md
+├─ src
+│  ├─ api
+│  │  └─ api.js - API 호출
+│  ├─ App.jsx
+│  ├─ components
+│  │  ├─ Card.jsx - 카드 컴포넌트
+│  │  └─ Loader.jsx - 로딩 스피너
+│  ├─ css
+│  │  ├─ Card.module.css
+│  │  ├─ DetailPage.module.css
+│  │  ├─ global.css
+│  │  ├─ ListPage.module.css
+│  │  └─ Loader.module.css
+│  ├─ data
+│  │  ├─ mmaData.json - 크롤링 데이터
+│  │  └─ MockData.js - 목업 데이터
+│  ├─ main.jsx
+│  ├─ pages
+│  │  ├─ DetailPage.jsx - 자세히 보기 버튼 클릭시 (상세 페이지)
+│  │  └─ ListPage.jsx - 메인 페이지
+│  └─ utils
+│     └─ dateUtils.js
+├─ UML.puml
+└─ vite.config.js
+
+```
 
 ## 현재 데이터 흐름 (Front-end Only)
 
