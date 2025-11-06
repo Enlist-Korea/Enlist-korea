@@ -848,3 +848,5 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,java,kotlin,visualstudio,intellij,intellij+all,react,nextjs,node
 /.vite
+
+/.vscode
