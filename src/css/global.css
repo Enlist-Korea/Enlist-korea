@@ -19,7 +19,7 @@ body {
   background-color: var(--bg-color);
   color: var(--primary-text-color);
   margin: 0;
-  padding: 2rem;
+  /* padding: 2rem; */
 }
 
 a {

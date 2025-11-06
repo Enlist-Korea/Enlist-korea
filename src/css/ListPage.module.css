@@ -1,7 +1,8 @@
 /* --- 페이지 레이아웃 --- */
 .pageContainer {
   max-width: 1600px;
-  margin: 0;
+  margin: 0 auto;
+  padding: 0 1rem 1rem 1rem;
 }
 
 .pageHeader h1 {
@@ -28,13 +29,13 @@
   padding: 1.5rem;
   border-radius: 12px;
   border: 1px solid var(--border-color);
-  margin-top: 2rem;
+  margin-top: 1rem;
   align-items: center;
   max-width: fit-content;
 }
 
 .searchBar {
-  flex: 1 1 300px; /* 'flex: flex auto'는 유효하지 않은 값이므로 수정했습니다. */
+  /* flex: 1 1 300px; 'flex: flex auto'는 유효하지 않은 값이므로 수정했습니다. */
   position: relative;
   min-width: 250px;
 }
@@ -85,7 +86,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 2rem 0 1.5rem;
+  margin: 1rem 0 1.5rem;
   font-size: 0.9rem;
   color: var(--secondary-text-color);
 }
@@ -106,13 +107,13 @@
 
 .errorText {
   text-align: center;
-  padding: 2rem;
+  padding: 1rem;
   color: #ff6b6b;
 }
 
 .noResults {
   text-align: center;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 /* --- 반응형 디자인 --- */
@@ -123,6 +124,10 @@
   } */
 
   .filterControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .filterActions {
     flex-direction: column;
     align-items: stretch;
   }

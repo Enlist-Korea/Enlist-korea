@@ -1,11 +1,12 @@
 /* --- 페이지 레이아웃 (From inline styles) --- */
 .pageContainer {
-  padding: 2rem; /* DetailPage의 기본 패딩을 2rem으로 통일합니다 */
+  padding: 2rem 0;
 }
 
 .title {
   font-size: 1.5rem;
   margin-bottom: 1rem;
+  padding: 0 1rem;
 }
 
 /* --- 로딩/에러 (From inline styles) --- */
