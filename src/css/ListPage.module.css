@@ -1,0 +1,132 @@
+/* --- 페이지 레이아웃 --- */
+.pageContainer {
+  max-width: 1600px;
+  margin: 0;
+}
+
+.pageHeader h1 {
+  max-width: fit-content;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: #fff;
+}
+
+.pageHeader p {
+  max-width: fit-content;
+  font-size: 1rem;
+  color: var(--secondary-text-color);
+  margin-top: 0.5rem;
+}
+
+/* --- 필터 컨트롤 --- */
+.filterControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background-color: var(--card-bg-color);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  margin-top: 2rem;
+  align-items: center;
+  max-width: fit-content;
+}
+
+.searchBar {
+  flex: 1 1 300px; /* 'flex: flex auto'는 유효하지 않은 값이므로 수정했습니다. */
+  position: relative;
+  min-width: 250px;
+}
+
+.searchBar input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background-color: #333;
+  color: var(--primary-text-color);
+}
+.searchBar input::placeholder {
+  color: var(--secondary-text-color);
+}
+
+.icon {
+  /* .search-bar .icon -> .icon */
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--secondary-text-color);
+}
+
+.filterActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* filter-controls select, button -> .filterSelect, .resetBtn */
+.filterSelect,
+.resetBtn {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: #333;
+  color: var(--primary-text-color);
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.resultsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0 1.5rem;
+  font-size: 0.9rem;
+  color: var(--secondary-text-color);
+}
+
+/* --- 카드 그리드 --- */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(350px, 1fr)
+  );
+  gap: 1.5rem;
+}
+
+/* --- 렌더링 로직용 스타일 (인라인 스타일 -> 클래스) --- */
+.loadingContainer {
+  min-height: 50vh;
+  display: grid;
+  place-content: center;
+}
+
+.errorText {
+  text-align: center;
+  padding: 2rem;
+  color: #ff6b6b;
+}
+
+.noResults {
+  text-align: center;
+  padding: 2rem;
+}
+
+/* --- 반응형 디자인 --- */
+@media (max-width: 768px) {
+  /* body 스타일은 global.css 또는 index.css로 이동하는 것을 권장합니다. */
+  /* body {
+    padding: 1rem;
+  } */
+
+  .filterControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

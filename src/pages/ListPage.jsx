@@ -3,6 +3,7 @@ import { Card } from "../components/Card";
 import { Loader } from "../components/Loader";
 import { fetchRecruitments } from "../api/api";
 import { getRecruitmentStatus } from "../utils/dateUtils";
+import styles from "../css/ListPage.module.css";
 
 /**
  * [ListPage 컴포넌트]
@@ -152,130 +153,113 @@ export const ListPage = () => {
   const renderContent = () => {
     if (isLoading)
       return (
-        <div
-          style={{
-            minHeight: "50vh",
-            display: "grid",
-            placeContent: "center",
-          }}
-        >
-          <Loader />{" "}
+        <div className={styles.loadingContainer}>
+          <Loader />
         </div>
       );
     if (error)
       return (
-        <div
-          style={{
-            textAlign: "center",
-            padding: "2rem",
-            color: "#ff6b6b",
-          }}
-        >
-          {error}{" "}
-        </div>
+        <div className={styles.errorText}>{error}</div>
       );
     if (filteredItems.length === 0)
       return (
-        <div
-          style={{ textAlign: "center", padding: "2rem" }}
-        >
-          검색 결과가 없습니다.{" "}
+        <div className={styles.noResults}>
+          검색 결과가 없습니다.
         </div>
       );
 
-    // 최종적으로 필터링된 아이템들을 Card 컴포넌트로 만들어 화면에 뿌려줌
     return (
-      <div className="card-grid">
-        {" "}
-        {filteredItems.map(
-          (
-            item, // props로 전달
-          ) => (
-            <Card key={item.id} item={item} />
-          ),
-        )}{" "}
+      <div className={styles.cardGrid}>
+        {filteredItems.map((item) => (
+          <Card key={item.id} item={item} />
+        ))}
       </div>
     );
   };
 
-  // 이하 JSX는 화면의 전체적인 구조 (헤더, 필터, 결과)를 담당
   return (
-    <div className="page-container">
-      {" "}
-      <header className="page-header">
-        <h1>병무청 모집병 조회</h1>{" "}
-        <p>
-          현재 지원 가능한 모집병 공고를 확인하세요.
-        </p>{" "}
-      </header>{" "}
-      <div className="filter-controls">
-        {" "}
-        <div className="search-bar">
-          <span className="icon">🔍</span>{" "}
+    <div className={styles.pageContainer}>
+      <header className={styles.pageHeader}>
+        <h1>병무청 모집병 조회</h1>
+        <p>현재 지원 가능한 모집병 공고를 확인하세요.</p>
+      </header>
+
+      <div className={styles.filterControls}>
+        <div className={styles.searchBar}>
+          <span className={styles.icon}>🔍</span>
           <input
             type="text"
             placeholder="특기명 검색..."
             value={searchTermFilteredValue}
             onChange={(e) => setSearchTerm(e.target.value)}
-          />{" "}
-        </div>{" "}
-        <div className="filter-actions">
-          {" "}
+          />
+        </div>
+
+        <div className={styles.filterActions}>
           <select
+            className={styles.filterSelect}
             value={selectedForce}
             onChange={(e) =>
               setSelectedForce(e.target.value)
             }
           >
-            <option>전체 군</option> <option>육군</option>{" "}
-            <option>해군</option> <option>공군</option>{" "}
-            <option>해병</option>{" "}
-          </select>{" "}
+            <option>전체 군</option>
+            <option>육군</option>
+            <option>해군</option>
+            <option>공군</option>
+            <option>해병</option>
+          </select>
+
           <select
+            className={styles.filterSelect}
             value={selectedType}
             onChange={(e) =>
               setSelectedType(e.target.value)
             }
           >
-            <option>전체 모집 구분</option>{" "}
+            <option>전체 모집 구분</option>
             {[
               ...new Set(
                 originalItems.map((item) => item.mojipGbnm),
               ),
             ].map((type) => (
               <option key={type} value={type}>
-                {type}{" "}
+                {type}
               </option>
-            ))}{" "}
-          </select>{" "}
+            ))}
+          </select>
+
           <select
+            className={styles.filterSelect}
             value={selectedStatus}
             onChange={(e) =>
               setSelectedStatus(e.target.value)
             }
           >
             <option>전체 상태</option>
-            <option>모집중</option>{" "}
-            <option>모집예정</option>{" "}
-          </select>{" "}
+            <option>모집중</option>
+            <option>모집예정</option>
+          </select>
+
           <button
-            className="reset-btn"
+            className={styles.resetBtn}
             onClick={resetButtonHandle}
           >
-            초기화{" "}
-          </button>{" "}
-        </div>{" "}
-      </div>{" "}
-      <div className="results-header">
-        {" "}
+            초기화
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.resultsHeader}>
         {!isLoading && !error && (
           <span>
             총 {filteredItems.length}개의 모집공고가
-            있습니다.{" "}
+            있습니다.
           </span>
-        )}{" "}
+        )}
       </div>
-      <main>{renderContent()}</main>{" "}
+
+      <main>{renderContent()}</main>
     </div>
   );
 };

@@ -1,0 +1,84 @@
+/* --- 페이지 레이아웃 (From inline styles) --- */
+.pageContainer {
+  padding: 2rem; /* DetailPage의 기본 패딩을 2rem으로 통일합니다 */
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* --- 로딩/에러 (From inline styles) --- */
+.loadingText,
+.noDataText {
+  padding: 2rem;
+  text-align: center;
+}
+
+.errorText {
+  padding: 2rem;
+  color: red;
+  text-align: center;
+}
+
+/* --- 상세 페이지 탭 메뉴 스타일 --- */
+.tabNav {
+  display: flex;
+  border-bottom: 2px solid var(--border-color);
+  margin-bottom: -1px; /* 탭 콘텐츠와 자연스럽게 연결 */
+}
+
+.tabButton {
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  background: none;
+  border: none;
+  color: var(--secondary-text-color); /* 비활성 탭 색상 */
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition:
+    color 0.2s,
+    border-bottom-color 0.2s;
+}
+
+.tabButton:hover {
+  color: var(--primary-text-color); /* 호버 시 색상 */
+}
+
+/* .active 클래스는 JSX에서 동적으로 styles.active를 참조합니다. */
+.active {
+  color: var(--primary-text-color); /* 활성 탭 색상 */
+  border-bottom-color: var(
+    --accent-color-blue
+  ); /* 활성 탭 하단 파란색 줄 */
+}
+
+/* --- 탭 콘텐츠 (From inline styles) --- */
+.tabContentWrapper {
+  background: var(--card-bg-color, #1e1e24);
+  color: var(--primary-text-color, #e0e0e0);
+  border-radius: 8px;
+  padding: 1.5rem;
+  overflow-x: auto;
+  border-top: 1px solid var(--border-color); /* 탭과 분리되는 느낌을 주기 위해 추가 */
+}
+
+.tabPane {
+  display: none; /* 기본적으로 모든 탭 콘텐츠 숨김 */
+}
+/* .active 클래스는 JSX에서 동적으로 styles.active를 참조합니다. */
+.tabPane.active {
+  display: block; /* 활성 탭 콘텐츠만 표시 */
+}
+
+/* 탭 콘텐츠 내부 스타일 (크롤링한 HTML에 적용)
+  :global() 선택자는 CSS Module 파일 안에서 
+  모듈과 관계없는 '전역' HTML 태그(여기서는 img)를 선택할 때 사용합니다.
+*/
+.tabContentWrapper :global(img) {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
