@@ -1,7 +1,7 @@
-import { useParams, useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import mmaData from "../data/mmaData.json"; // 로컬 JSON 불러오기
-import styles from "../css/DetailPage.module.css";
+import { useParams, useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import mmaData from '../data/mmaData.json'; // 로컬 JSON 불러오기
+import styles from '../css/DetailPage.module.css';
 
 /**
  * [DetailPage 컴포넌트]
@@ -13,14 +13,14 @@ export default function DetailPage() {
   // --- Hooks 및 상태 초기화 ---
   const { id } = useParams(); // URL에서 :id 값 (예: "133.106")
   const [searchParams] = useSearchParams();
-  const name = searchParams.get("name") || "특기 정보"; // URL에서 ?name= 값
+  const name = searchParams.get('name') || '특기 정보'; // URL에서 ?name= 값
 
   // 로딩 상태
   const [loading, setLoadingState] = useState(true);
   // 에러 상태
   const [error, setError] = useState(null);
   // 현재 활성화된 탭 ID (기본값: 'mission')
-  const [activeTab, setActiveTab] = useState("mission");
+  const [activeTab, setActiveTab] = useState('mission');
   // JSON에서 찾은 특기 데이터 전체 (html, planHtml, noticeHtml 포함)
   const [specialtyData, setSpecialtyData] = useState(null);
 
@@ -71,25 +71,25 @@ export default function DetailPage() {
       <nav className={styles.tabNav}>
         <button
           className={`${styles.tabButton} ${
-            activeTab === "mission" ? styles.active : ""
+            activeTab === 'mission' ? styles.active : ''
           }`}
-          onClick={() => setActiveTab("mission")}
+          onClick={() => setActiveTab('mission')}
         >
           군사특기임무 및 설명
         </button>
         <button
           className={`${styles.tabButton} ${
-            activeTab === "plan" ? styles.active : ""
+            activeTab === 'plan' ? styles.active : ''
           }`}
-          onClick={() => setActiveTab("plan")}
+          onClick={() => setActiveTab('plan')}
         >
           이달의 모집 계획
         </button>
         <button
           className={`${styles.tabButton} ${
-            activeTab === "notice" ? styles.active : ""
+            activeTab === 'notice' ? styles.active : ''
           }`}
-          onClick={() => setActiveTab("notice")}
+          onClick={() => setActiveTab('notice')}
         >
           공지사항
         </button>
@@ -99,7 +99,7 @@ export default function DetailPage() {
         {/* 탭 1: 군사특기임무 */}
         <div
           className={`${styles.tabPane} ${
-            activeTab === "mission" ? styles.active : ""
+            activeTab === 'mission' ? styles.active : ''
           }`}
         >
           <div
@@ -112,13 +112,13 @@ export default function DetailPage() {
         {/* 탭 2: 이달의 모집 계획 */}
         <div
           className={`${styles.tabPane} ${
-            activeTab === "plan" ? styles.active : ""
+            activeTab === 'plan' ? styles.active : ''
           }`}
         >
           <div
             dangerouslySetInnerHTML={{
               __html:
-                specialtyData.planHtml || "<p>모집 계획 정보가 없습니다.</p>",
+                specialtyData.planHtml || '<p>모집 계획 정보가 없습니다.</p>',
             }}
           />
         </div>
@@ -126,13 +126,13 @@ export default function DetailPage() {
         {/* 탭 3: 공지사항 */}
         <div
           className={`${styles.tabPane} ${
-            activeTab === "notice" ? styles.active : ""
+            activeTab === 'notice' ? styles.active : ''
           }`}
         >
           <div
             dangerouslySetInnerHTML={{
               __html:
-                specialtyData.noticeHtml || "<p>공지사항 정보가 없습니다.</p>",
+                specialtyData.noticeHtml || '<p>공지사항 정보가 없습니다.</p>',
             }}
           />
         </div>

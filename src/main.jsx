@@ -1,12 +1,12 @@
 // --- import ---
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import App from "./App.jsx";
-import "../src/css/global.css";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App.jsx';
+import '../src/css/global.css';
 
 // public/index.html에 있는 파일에 있는 id가 "root"인 DOM 요소를 찾아서 리액트 앱의 시작점으로 지정
-ReactDOM.createRoot(document.getElementById("root")).render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   // 개발 중에 발생하는 잠재적인 문제를 감지하고 경고를 표시
   <React.StrictMode>
     {/*

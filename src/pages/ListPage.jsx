@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { Card } from "../components/Card";
-import { Loader } from "../components/Loader";
-import { fetchRecruitments } from "../api/api";
-import { getRecruitmentStatus } from "../utils/dateUtils";
-import styles from "../css/ListPage.module.css";
+import { useState, useEffect } from 'react';
+import { Card } from '../components/Card';
+import { Loader } from '../components/Loader';
+import { fetchRecruitments } from '../api/api';
+import { getRecruitmentStatus } from '../utils/dateUtils';
+import styles from '../css/ListPage.module.css';
 
 /**
  * [ListPage 컴포넌트]
@@ -31,13 +31,13 @@ export const ListPage = () => {
   const [error, setError] = useState(null);
 
   // 사용자가 검색한 검색어 (초기값: 빈 문자열)
-  const [searchTermFilteredValue, setSearchTerm] = useState("");
+  const [searchTermFilteredValue, setSearchTerm] = useState('');
   // 사용자가 선택한 '군종'
-  const [selectedForce, setSelectedForce] = useState("전체 군");
+  const [selectedForce, setSelectedForce] = useState('전체 군');
   // 사용자가 선택한 '모집 구분'
-  const [selectedType, setSelectedType] = useState("전체 모집 구분");
+  const [selectedType, setSelectedType] = useState('전체 모집 구분');
   // 사용자가 선택한 '모집 상태'
-  const [selectedStatus, setSelectedStatus] = useState("전체 상태");
+  const [selectedStatus, setSelectedStatus] = useState('전체 상태');
 
   /**
    * 컴포넌트가 첫 렌더링 될 때 최초 1행 실행하는 데이터 로딩 함수
@@ -57,7 +57,7 @@ export const ListPage = () => {
           item.jeopsuSjdtm,
           item.jeopsuJrdtm,
         );
-        return statusText !== "모집마감";
+        return statusText !== '모집마감';
       });
 
       // 원본 데이터와 화면 표시용 데이터 상태를 업데이트
@@ -65,7 +65,7 @@ export const ListPage = () => {
       setFilteredItems(availableItems); // 화면 표시용 데이터도 최초는 동일하게 생성
     } catch (err) {
       // 에러 발생 시
-      setError("데이터를 불러오는 중 오류가 발생했습니다.");
+      setError('데이터를 불러오는 중 오류가 발생했습니다.');
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -100,21 +100,21 @@ export const ListPage = () => {
     }
 
     // 군종 필터링
-    if (selectedForce !== "전체 군") {
+    if (selectedForce !== '전체 군') {
       filterSearchResults = filterSearchResults.filter(
         (item) => item.gunGbnm === selectedForce,
       );
     }
 
     // 모집 구분 필터링
-    if (selectedType !== "전체 모집 구분") {
+    if (selectedType !== '전체 모집 구분') {
       filterSearchResults = filterSearchResults.filter(
         (item) => item.mojipGbnm === selectedType,
       );
     }
 
     // 모집상태 필터링
-    if (selectedStatus !== "전체 상태") {
+    if (selectedStatus !== '전체 상태') {
       filterSearchResults = filterSearchResults.filter((item) => {
         const { statusText } = getRecruitmentStatus(
           item.jeopsuSjdtm,
@@ -134,10 +134,10 @@ export const ListPage = () => {
 
   // 초기화 버튼을 눌렀을 때 실행되는 코드
   const resetButtonHandle = () => {
-    setSearchTerm("");
-    setSelectedForce("전체 군");
-    setSelectedType("전체 모집 구분");
-    setSelectedStatus("전체 상태");
+    setSearchTerm('');
+    setSelectedForce('전체 군');
+    setSelectedType('전체 모집 구분');
+    setSelectedStatus('전체 상태');
   };
 
   // --- 렌더링 로직 --- // 상황에 따라 다른 UI 출력

@@ -1,24 +1,24 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import {
   formatDate,
   getRecruitmentStatus,
   formatYearMonth,
-} from "../utils/dateUtils";
-import styles from "../css/Card.module.css";
+} from '../utils/dateUtils';
+import styles from '../css/Card.module.css';
 
 // 텍스트를 코드로 번역해줄 명단(MAP) 객체 생성
 // 이 코드는 '자세히 보기' 링크를 통해 DetailPage로 전달
 const GUN_CODE_MAP = {
-  육군: "1",
-  해군: "2",
-  공군: "3",
-  해병대: "4",
+  육군: '1',
+  해군: '2',
+  공군: '3',
+  해병대: '4',
 };
 
 // "기술행정병"을 "1"과 같은 코드로 변환
 // API 데이터에 '전문특기병' 같은 다른 모집 구분이 있다면 여기에 추가
 const MOJIP_CODE_MAP = {
-  기술행정병: "1",
+  기술행정병: '1',
 };
 
 /**
@@ -29,7 +29,7 @@ const MOJIP_CODE_MAP = {
 const parseRate = (rateStr) => {
   if (!rateStr) return 0;
   // "2.0:1" 같은 형식일 경우 ":1" 부분을 제거하기 위해 split 사용
-  const rate = parseFloat(String(rateStr).split(":")[0]);
+  const rate = parseFloat(String(rateStr).split(':')[0]);
   // 숫자로 변환 실패 시(NaN) 0을 반환
   return isNaN(rate) ? 0 : rate;
 };
@@ -58,15 +58,15 @@ export const Card = ({ item }) => {
 
   // 모집 상태(statusText)에 따라 CSS 클래스 이름을 반환
   const getTagClassName = () => {
-    if (statusText === "모집중") return styles.recruiting;
-    if (statusText === "모집마감") return styles.finished;
+    if (statusText === '모집중') return styles.recruiting;
+    if (statusText === '모집마감') return styles.finished;
     return styles.upcoming; // "모집예정" 등 그 외
   };
 
   // 입영월 데이터 처리
   // item.ipyeongDe ('*') 값이 우선이지만, 없거나 '*'이면 item.iyyjsijakYm 사용
   const enlistmentMonth =
-    item.ipyeongDe && item.ipyeongDe !== "*"
+    item.ipyeongDe && item.ipyeongDe !== '*'
       ? item.ipyeongDe
       : item.iyyjsijakYm;
 
