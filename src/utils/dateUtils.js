@@ -3,7 +3,11 @@
  * 모집 시작일과 종료일을 기준으로 현재 모집 상태(모집중, 모집마감, 모집예정)를 계산.
  */
 
-// 날짜 값을 YYYYMMDD 형식의 문자열로 변환하는 함수
+/**
+ * 날짜 값이 유효한 8자리 YYYYMMDD 형식의 문자열인지 확인하고 반환합
+ * @param {string | number | null | undefined} dateValue - 변환할 날짜 값 (예: 20251031)
+ * @returns {string | null} 유효한 8자리 날짜 문자열 또는 유효하지 않은 경우 null
+ */
 const getDataString = (dateValue) => {
   if (!dateValue) return null;
   const dateStr = String(dateValue);
@@ -12,7 +16,11 @@ const getDataString = (dateValue) => {
   return dateStr;
 };
 
-/** YYYYMMDD 형식의 값을 'YYYY.MM.DD' 형식으로 변환 */
+/**
+ * YYYYMMDD 형식의 날짜 값을 'YYYY.MM.DD' 형식의 문자열로 변환
+ * @param {string | number | null | undefined} dateValue - YYYYMMDD 형식의 날짜 값
+ * @returns {string} 'YYYY.MM.DD' 형식의 문자열. 유효하지 않은 경우 "날짜 정보 없음".
+ */
 export const formatDate = (dateValue) => {
   const dateStr = getDataString(dateValue);
   if (!dateStr) return "날짜 정보 없음";
@@ -23,7 +31,11 @@ export const formatDate = (dateValue) => {
   return `${year}.${month}.${day}`;
 };
 
-/** YYYYMM 형식의 값을 'YYYY년 MM월' 형식으로 변환 */
+/**
+ * YYYYMM 형식의 값을 'YYYY년 MM월' 형식의 문자열로 변환
+ * @param {string | number | null | undefined} yearMonthValue - YYYYMM 형식의 값 (예: 202512)
+ * @returns {string} 'YYYY년 MM월' 형식의 문자열. 유효하지 않은 경우 "정보 없음".
+ */
 export const formatYearMonth = (yearMonthValue) => {
   if (!yearMonthValue || String(yearMonthValue) === "*")
     return "정보 없음";
@@ -35,23 +47,37 @@ export const formatYearMonth = (yearMonthValue) => {
   return `${year}년 ${month}월`;
 };
 
-/** 날짜 값을 유효한 Date 객체로 변환. 실패 시 null 반환 */
+/**
+ * YYYYMMDD 형식의 날짜 값을 JavaScript의 Date 객체로 변환
+ * 시간은 비교를 위해 자정(00:00:00)으로 설정
+ * @param {string | number | null | undefined} dateValue - YYYYMMDD 형식의 날짜 값
+ * @returns {Date | null} 변환된 Date 객체 또는 유효하지 않은 경우 null
+ */
 const parseDate = (dateValue) => {
   if (!dateValue) return null; // 비어있는 값인지 먼저 확인 후, 비어있으면 null 반환
   const dateStr = String(dateValue);
   if (dateStr.length !== 8) return null;
 
   const year = parseInt(dateStr.substring(0, 4), 10);
-  const month = parseInt(dateStr.substring(4, 6), 10) - 1;
+  const month = parseInt(dateStr.substring(4, 6), 10) - 1; // JS 월은 0부터 시작
   const day = parseInt(dateStr.substring(6, 8), 10);
 
   const date = new Date(year, month, day);
+  // 유효하지 않은 날짜(예: 20250230)인지 확인
   if (isNaN(date.getTime())) return null;
 
   return date;
 };
 
-/** 현재 날짜와 비교하여 모집 상태와 남은 기간을 계산 */
+/**
+ * 현재 날짜를 기준으로 모집 상태(모집중, 모집예정, 모집마감)와
+ * 남은 기간 텍스트를 계산하여 객체로 반환
+ * @param {string | number | null | undefined} startDateValue - 모집 시작일 (YYYYMMDD)
+ * @param {string | number | null | undefined} endDateValue - 모집 종료일 (YYYYMMDD)
+ * @returns {{statusText: string, daysRemainingText: string}}
+ * - statusText: "모집중", "모집예정", "모집마감"
+ * - daysRemainingText: "X일 남음", "오늘 마감", "모집 예정", "모집 마감", "정보 없음"
+ */
 export const getRecruitmentStatus = (
   startDateValue,
   endDateValue,
