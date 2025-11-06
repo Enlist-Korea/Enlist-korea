@@ -1,7 +1,4 @@
-import {
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import mmaData from "../data/mmaData.json"; // 로컬 JSON 불러오기
 import styles from "../css/DetailPage.module.css";
@@ -41,9 +38,7 @@ export default function DetailPage() {
       setSpecialtyData(foundData);
     } else {
       // 데이터가 없으면 에러 메시지 설정
-      setError(
-        `ID ${id} 에 해당하는 캐시된 데이터가 없습니다.`,
-      );
+      setError(`ID ${id} 에 해당하는 캐시된 데이터가 없습니다.`);
     }
 
     setLoadingState(false);
@@ -51,11 +46,7 @@ export default function DetailPage() {
 
   // 로딩 중일 때
   if (loading) {
-    return (
-      <div className={styles.loadingText}>
-        불러오는 중...
-      </div>
-    );
+    return <div className={styles.loadingText}>불러오는 중...</div>;
   }
 
   // 에러 발생 시
@@ -66,9 +57,7 @@ export default function DetailPage() {
   // 데이터가 없을 때
   if (!specialtyData) {
     return (
-      <div className={styles.noDataText}>
-        데이터를 표시할 수 없습니다.
-      </div>
+      <div className={styles.noDataText}>데이터를 표시할 수 없습니다.</div>
     );
   }
 
@@ -129,8 +118,7 @@ export default function DetailPage() {
           <div
             dangerouslySetInnerHTML={{
               __html:
-                specialtyData.planHtml ||
-                "<p>모집 계획 정보가 없습니다.</p>",
+                specialtyData.planHtml || "<p>모집 계획 정보가 없습니다.</p>",
             }}
           />
         </div>
@@ -144,8 +132,7 @@ export default function DetailPage() {
           <div
             dangerouslySetInnerHTML={{
               __html:
-                specialtyData.noticeHtml ||
-                "<p>공지사항 정보가 없습니다.</p>",
+                specialtyData.noticeHtml || "<p>공지사항 정보가 없습니다.</p>",
             }}
           />
         </div>

@@ -37,8 +37,7 @@ export const formatDate = (dateValue) => {
  * @returns {string} 'YYYY년 MM월' 형식의 문자열. 유효하지 않은 경우 "정보 없음".
  */
 export const formatYearMonth = (yearMonthValue) => {
-  if (!yearMonthValue || String(yearMonthValue) === "*")
-    return "정보 없음";
+  if (!yearMonthValue || String(yearMonthValue) === "*") return "정보 없음";
   const yearMonthStr = String(yearMonthValue);
   if (yearMonthStr.length !== 6) return "정보 없음";
 
@@ -78,10 +77,7 @@ const parseDate = (dateValue) => {
  * - statusText: "모집중", "모집예정", "모집마감"
  * - daysRemainingText: "X일 남음", "오늘 마감", "모집 예정", "모집 마감", "정보 없음"
  */
-export const getRecruitmentStatus = (
-  startDateValue,
-  endDateValue,
-) => {
+export const getRecruitmentStatus = (startDateValue, endDateValue) => {
   const now = new Date(); // 새로운 Date 객체 생성
   now.setHours(0, 0, 0, 0); // 시간은 무시하고 날짜만 비교하기 위해 자정으로 설정
 
@@ -113,9 +109,7 @@ export const getRecruitmentStatus = (
   } else {
     // 남은 날짜 계산
     const diffTime = endDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(
-      diffTime / (1000 * 60 * 60 * 24),
-    );
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays < 0)
       return {
         statusText: "모집마감",

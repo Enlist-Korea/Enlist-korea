@@ -43,11 +43,10 @@ const parseRate = (rateStr) => {
 export const Card = ({ item }) => {
   // 모집 상태 및 남은 기간 계산
   // dateUtils.js의 함수를 사용해 "모집중", "3일 남음" 등의 텍스트를 가져옴
-  const { statusText, daysRemainingText } =
-    getRecruitmentStatus(
-      item.jeopsuSjdtm, // 접수시작일
-      item.jeopsuJrdtm, // 접수종료일
-    );
+  const { statusText, daysRemainingText } = getRecruitmentStatus(
+    item.jeopsuSjdtm, // 접수시작일
+    item.jeopsuJrdtm, // 접수종료일
+  );
 
   // 경쟁률 계산
   const competitionRate = parseRate(item.rate); // '2.0:1' -> 2.0
@@ -91,29 +90,19 @@ export const Card = ({ item }) => {
         </div>
 
         {/* 카드 제목: 특기명 */}
-        <h3 className={styles.cardTitle}>
-          {item.gsteukgiNm}
-        </h3>
+        <h3 className={styles.cardTitle}>{item.gsteukgiNm}</h3>
 
         {/* 카드 본문: 핵심 정보 및 상세 정보 */}
         <div className={styles.cardBody}>
           {/* 핵심 스탯: 남은 기간, 경쟁률 */}
           <div className={styles.keyStats}>
             <div className={styles.statItem}>
-              <span className={styles.statValue}>
-                {daysRemainingText}
-              </span>
-              <span className={styles.statLabel}>
-                남은 기간
-              </span>
+              <span className={styles.statValue}>{daysRemainingText}</span>
+              <span className={styles.statLabel}>남은 기간</span>
             </div>
             <div className={styles.statItem}>
-              <span className={styles.statValue}>
-                {item.rate}
-              </span>
-              <span className={styles.statLabel}>
-                경쟁률
-              </span>
+              <span className={styles.statValue}>{item.rate}</span>
+              <span className={styles.statLabel}>경쟁률</span>
             </div>
           </div>
 
@@ -127,14 +116,8 @@ export const Card = ({ item }) => {
 
           {/* 상세 정보 그리드 */}
           <div className={styles.detailsGrid}>
-            <DetailItem
-              label="선발"
-              value={`${item.seonbalPcnt}명`}
-            />
-            <DetailItem
-              label="접수"
-              value={`${item.jeopsuPcnt}명`}
-            />
+            <DetailItem label="선발" value={`${item.seonbalPcnt}명`} />
+            <DetailItem label="접수" value={`${item.jeopsuPcnt}명`} />
             <DetailItem
               label="접수기간"
               value={`${formatDate(

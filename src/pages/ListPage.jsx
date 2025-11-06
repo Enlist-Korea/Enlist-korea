@@ -31,17 +31,13 @@ export const ListPage = () => {
   const [error, setError] = useState(null);
 
   // 사용자가 검색한 검색어 (초기값: 빈 문자열)
-  const [searchTermFilteredValue, setSearchTerm] =
-    useState("");
+  const [searchTermFilteredValue, setSearchTerm] = useState("");
   // 사용자가 선택한 '군종'
-  const [selectedForce, setSelectedForce] =
-    useState("전체 군");
+  const [selectedForce, setSelectedForce] = useState("전체 군");
   // 사용자가 선택한 '모집 구분'
-  const [selectedType, setSelectedType] =
-    useState("전체 모집 구분");
+  const [selectedType, setSelectedType] = useState("전체 모집 구분");
   // 사용자가 선택한 '모집 상태'
-  const [selectedStatus, setSelectedStatus] =
-    useState("전체 상태");
+  const [selectedStatus, setSelectedStatus] = useState("전체 상태");
 
   /**
    * 컴포넌트가 첫 렌더링 될 때 최초 1행 실행하는 데이터 로딩 함수
@@ -96,13 +92,10 @@ export const ListPage = () => {
     // 검색어 필터링
     if (searchTermFilteredValue) {
       // 모두 소문자로 변환 후 필터에서 검색한 것만 필터링
-      filterSearchResults = filterSearchResults.filter(
-        (item) =>
-          item.gsteukgiNm
-            .toLowerCase()
-            .includes(
-              searchTermFilteredValue.toLowerCase(),
-            ),
+      filterSearchResults = filterSearchResults.filter((item) =>
+        item.gsteukgiNm
+          .toLowerCase()
+          .includes(searchTermFilteredValue.toLowerCase()),
       );
     }
 
@@ -122,15 +115,13 @@ export const ListPage = () => {
 
     // 모집상태 필터링
     if (selectedStatus !== "전체 상태") {
-      filterSearchResults = filterSearchResults.filter(
-        (item) => {
-          const { statusText } = getRecruitmentStatus(
-            item.jeopsuSjdtm,
-            item.jeopsuJrdtm,
-          );
-          return statusText === selectedStatus;
-        },
-      );
+      filterSearchResults = filterSearchResults.filter((item) => {
+        const { statusText } = getRecruitmentStatus(
+          item.jeopsuSjdtm,
+          item.jeopsuJrdtm,
+        );
+        return statusText === selectedStatus;
+      });
     }
     setFilteredItems(filterSearchResults);
   }, [
@@ -157,16 +148,9 @@ export const ListPage = () => {
           <Loader />
         </div>
       );
-    if (error)
-      return (
-        <div className={styles.errorText}>{error}</div>
-      );
+    if (error) return <div className={styles.errorText}>{error}</div>;
     if (filteredItems.length === 0)
-      return (
-        <div className={styles.noResults}>
-          검색 결과가 없습니다.
-        </div>
-      );
+      return <div className={styles.noResults}>검색 결과가 없습니다.</div>;
 
     return (
       <div className={styles.cardGrid}>
@@ -199,9 +183,7 @@ export const ListPage = () => {
           <select
             className={styles.filterSelect}
             value={selectedForce}
-            onChange={(e) =>
-              setSelectedForce(e.target.value)
-            }
+            onChange={(e) => setSelectedForce(e.target.value)}
           >
             <option>전체 군</option>
             <option>육군</option>
@@ -213,38 +195,29 @@ export const ListPage = () => {
           <select
             className={styles.filterSelect}
             value={selectedType}
-            onChange={(e) =>
-              setSelectedType(e.target.value)
-            }
+            onChange={(e) => setSelectedType(e.target.value)}
           >
             <option>전체 모집 구분</option>
-            {[
-              ...new Set(
-                originalItems.map((item) => item.mojipGbnm),
+            {[...new Set(originalItems.map((item) => item.mojipGbnm))].map(
+              (type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
               ),
-            ].map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
+            )}
           </select>
 
           <select
             className={styles.filterSelect}
             value={selectedStatus}
-            onChange={(e) =>
-              setSelectedStatus(e.target.value)
-            }
+            onChange={(e) => setSelectedStatus(e.target.value)}
           >
             <option>전체 상태</option>
             <option>모집중</option>
             <option>모집예정</option>
           </select>
 
-          <button
-            className={styles.resetBtn}
-            onClick={resetButtonHandle}
-          >
+          <button className={styles.resetBtn} onClick={resetButtonHandle}>
             초기화
           </button>
         </div>
@@ -252,10 +225,7 @@ export const ListPage = () => {
 
       <div className={styles.resultsHeader}>
         {!isLoading && !error && (
-          <span>
-            총 {filteredItems.length}개의 모집공고가
-            있습니다.
-          </span>
+          <span>총 {filteredItems.length}개의 모집공고가 있습니다.</span>
         )}
       </div>
 

@@ -50,9 +50,7 @@
 /* .active 클래스는 JSX에서 동적으로 styles.active를 참조합니다. */
 .active {
   color: var(--primary-text-color); /* 활성 탭 색상 */
-  border-bottom-color: var(
-    --accent-color-blue
-  ); /* 활성 탭 하단 파란색 줄 */
+  border-bottom-color: var(--accent-color-blue); /* 활성 탭 하단 파란색 줄 */
 }
 
 /* --- 탭 콘텐츠 (From inline styles) --- */
