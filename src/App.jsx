@@ -1,6 +1,5 @@
-// --- import ---
 import { Routes, Route } from 'react-router-dom';
-import { ListPage } from './pages/ListPage';
+import ListPage from './pages/ListPage';
 import DetailPage from './pages/DetailPage';
 
 // react-router-dom의 Routes와 Route를 사용해 URL 경로와 컴포넌트를 매핑

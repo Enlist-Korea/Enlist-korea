@@ -70,6 +70,7 @@ export default function DetailPage() {
 
       <nav className={styles.tabNav}>
         <button
+          type="button"
           className={`${styles.tabButton} ${
             activeTab === 'mission' ? styles.active : ''
           }`}
@@ -78,6 +79,7 @@ export default function DetailPage() {
           군사특기임무 및 설명
         </button>
         <button
+          type="button"
           className={`${styles.tabButton} ${
             activeTab === 'plan' ? styles.active : ''
           }`}
@@ -86,6 +88,7 @@ export default function DetailPage() {
           이달의 모집 계획
         </button>
         <button
+          type="button"
           className={`${styles.tabButton} ${
             activeTab === 'notice' ? styles.active : ''
           }`}

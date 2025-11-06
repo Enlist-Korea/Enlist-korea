@@ -31,7 +31,7 @@ const parseRate = (rateStr) => {
   // "2.0:1" 같은 형식일 경우 ":1" 부분을 제거하기 위해 split 사용
   const rate = parseFloat(String(rateStr).split(':')[0]);
   // 숫자로 변환 실패 시(NaN) 0을 반환
-  return isNaN(rate) ? 0 : rate;
+  return Number.isNaN(rate) ? 0 : rate;
 };
 
 /**
@@ -40,7 +40,7 @@ const parseRate = (rateStr) => {
  * @param {Object} props.item - 단일 모집 공고 데이터 객체
  * @returns {JSX.Element} 카드 UI를 나타내는 React 엘리먼트
  */
-export const Card = ({ item }) => {
+export default function Card({ item }) {
   // 모집 상태 및 남은 기간 계산
   // dateUtils.js의 함수를 사용해 "모집중", "3일 남음" 등의 텍스트를 가져옴
   const { statusText, daysRemainingText } = getRecruitmentStatus(
@@ -111,7 +111,7 @@ export const Card = ({ item }) => {
             <div
               className={styles.competitionBarInner}
               style={{ width: `${progressBarWidth}%` }}
-            ></div>
+            />
           </div>
 
           {/* 상세 정보 그리드 */}
@@ -147,14 +147,16 @@ export const Card = ({ item }) => {
       </div>
     </div>
   );
-};
+}
 
 /**
  * 카드 내부에 '라벨: 값' 쌍을 표시하는 작은 헬퍼 컴포넌트
  */
-const DetailItem = ({ label, value }) => (
-  <div className={styles.detailItem}>
-    <span className={styles.detailLabel}>{label}</span>
-    <span className={styles.detailValue}>{value}</span>
-  </div>
-);
+function DetailItem({ label, value }) {
+  return (
+    <div className={styles.detailItem}>
+      <span className={styles.detailLabel}>{label}</span>
+      <span className={styles.detailValue}>{value}</span>
+    </div>
+  );
+}

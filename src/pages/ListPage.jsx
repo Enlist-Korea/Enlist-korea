@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Card } from '../components/Card';
-import { Loader } from '../components/Loader';
+import Card from '../components/Card';
+import Loader from '../components/Loader';
 import { fetchRecruitments } from '../api/api';
 import { getRecruitmentStatus } from '../utils/dateUtils';
 import styles from '../css/ListPage.module.css';
@@ -13,7 +13,7 @@ import styles from '../css/ListPage.module.css';
  * 사용자 입력 (검색, 필터 선택)을 받아 상태를 변경하고, 이에 따라 화면을 동적으로 변경
  */
 
-export const ListPage = () => {
+export default function ListPage() {
   // --- 상태 관리 ---
   // API 원본 데이터 보관용(originalItems)과 화면 표시용(filteredItems)을 분리
   // => 필터 초기화 기능을 쉽게 구현하기 위함
@@ -217,7 +217,11 @@ export const ListPage = () => {
             <option>모집예정</option>
           </select>
 
-          <button className={styles.resetBtn} onClick={resetButtonHandle}>
+          <button
+            type="button"
+            className={styles.resetBtn}
+            onClick={resetButtonHandle}
+          >
             초기화
           </button>
         </div>
@@ -232,4 +236,4 @@ export const ListPage = () => {
       <main>{renderContent()}</main>
     </div>
   );
-};
+}
