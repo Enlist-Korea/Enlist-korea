@@ -26,34 +26,37 @@ npm run dev
 ## 폴더 구조
 
 ```bash
-Enlist-Korea
-├─ eslint.config.js
-├─ folder_structure.png
+Enlist-korea
+├─ .prettierrc.json - Prettier 설정 파일
+├─ eslint.config.js - ESLint 설정 파일
 ├─ index.html
 ├─ package-lock.json
 ├─ package.json
 ├─ README.md
 ├─ src
 │  ├─ api
-│  │  └─ api.js - API 호출
+│  │  └─ api.js
 │  ├─ App.jsx
 │  ├─ components
-│  │  ├─ Card.jsx - 카드 컴포넌트
-│  │  └─ Loader.jsx - 로딩 스피너
-│  ├─ css
+│  │  ├─ Card.jsx
+│  │  └─ Loader.jsx
+│  ├─ css - CSS Modules 방식 적용
 │  │  ├─ Card.module.css
 │  │  ├─ DetailPage.module.css
 │  │  ├─ global.css
 │  │  ├─ ListPage.module.css
 │  │  └─ Loader.module.css
 │  ├─ data
-│  │  ├─ mmaData.json - 크롤링 데이터
-│  │  └─ MockData.js - 목업 데이터
+│  │  ├─ mmaData.json
+│  │  └─ MockData.js
+│  ├─ hooks - 커스텀 Hook
+│  │  └─ useSpecialtyData.js
 │  ├─ main.jsx
 │  ├─ pages
-│  │  ├─ DetailPage.jsx - 자세히 보기 버튼 클릭시 (상세 페이지)
-│  │  └─ ListPage.jsx - 메인 페이지
+│  │  ├─ DetailPage.jsx
+│  │  └─ ListPage.jsx
 │  └─ utils
+│     ├─ Constants.js
 │     └─ dateUtils.js
 ├─ UML.puml
 └─ vite.config.js
