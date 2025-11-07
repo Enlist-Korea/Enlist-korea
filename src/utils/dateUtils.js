@@ -1,128 +1,122 @@
 /**
- * 날짜 데이터의 포맷팅(예: 20250917 -> 2025.09.17).
- * 모집 시작일과 종료일을 기준으로 현재 모집 상태(모집중, 모집마감, 모집예정)를 계산.
- */
-
-/**
- * 날짜 값이 유효한 8자리 YYYYMMDD 형식의 문자열인지 확인하고 반환합
- * @param {string | number | null | undefined} dateValue - 변환할 날짜 값 (예: 20251031)
- * @returns {string | null} 유효한 8자리 날짜 문자열 또는 유효하지 않은 경우 null
- */
-const getDataString = (dateValue) => {
-  if (!dateValue) return null;
-  const dateStr = String(dateValue);
-  if (dateStr.length !== 8) return null;
-
-  return dateStr;
-};
-
-/**
- * YYYYMMDD 형식의 날짜 값을 'YYYY.MM.DD' 형식의 문자열로 변환
- * @param {string | number | null | undefined} dateValue - YYYYMMDD 형식의 날짜 값
+ * ISO 형식의 날짜 값을 'YYYY.MM.DD' 형식의 문자열로 변환
+ * @param {string | null | undefined} dateValue - ISO 형식 날짜 문자열
  * @returns {string} 'YYYY.MM.DD' 형식의 문자열. 유효하지 않은 경우 "날짜 정보 없음".
  */
 export const formatDate = (dateValue) => {
-  const dateStr = getDataString(dateValue);
-  if (!dateStr) return "날짜 정보 없음";
+  if (!dateValue) return '날짜 정보 없음';
+  try {
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return '날짜 정보 없음';
 
-  const year = dateStr.substring(0, 4);
-  const month = dateStr.substring(4, 6);
-  const day = dateStr.substring(6, 8);
-  return `${year}.${month}.${day}`;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}.${month}.${day}`;
+  } catch (e) {
+    return '날짜 정보 없음';
+  }
 };
 
 /**
- * YYYYMM 형식의 값을 'YYYY년 MM월' 형식의 문자열로 변환
- * @param {string | number | null | undefined} yearMonthValue - YYYYMM 형식의 값 (예: 202512)
+ * ISO 형식의 날짜 값을 'YYYY년 MM월' 형식의 문자열로 변환
+ * @param {string | null | undefined} dateValue - ISO 형식 날짜 문자열
  * @returns {string} 'YYYY년 MM월' 형식의 문자열. 유효하지 않은 경우 "정보 없음".
  */
-export const formatYearMonth = (yearMonthValue) => {
-  if (!yearMonthValue || String(yearMonthValue) === "*") return "정보 없음";
-  const yearMonthStr = String(yearMonthValue);
-  if (yearMonthStr.length !== 6) return "정보 없음";
+export const formatYearMonth = (dateValue) => {
+  if (!dateValue || String(dateValue) === '*') return '정보 없음';
+  try {
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return '정보 없음';
 
-  const year = yearMonthStr.substring(0, 4);
-  const month = yearMonthStr.substring(4, 6);
-  return `${year}년 ${month}월`;
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${year}년 ${month}월`;
+  } catch (e) {
+    return '정보 없음';
+  }
 };
 
 /**
- * YYYYMMDD 형식의 날짜 값을 JavaScript의 Date 객체로 변환
+ * ISO 형식의 날짜 값을 JavaScript의 Date 객체로 변환
  * 시간은 비교를 위해 자정(00:00:00)으로 설정
- * @param {string | number | null | undefined} dateValue - YYYYMMDD 형식의 날짜 값
+ * @param {string | null | undefined} dateValue - ISO 형식 날짜 문자열
  * @returns {Date | null} 변환된 Date 객체 또는 유효하지 않은 경우 null
  */
 const parseDate = (dateValue) => {
-  if (!dateValue) return null; // 비어있는 값인지 먼저 확인 후, 비어있으면 null 반환
-  const dateStr = String(dateValue);
-  if (dateStr.length !== 8) return null;
+  if (!dateValue) return null;
 
-  const year = parseInt(dateStr.substring(0, 4), 10);
-  const month = parseInt(dateStr.substring(4, 6), 10) - 1; // JS 월은 0부터 시작
-  const day = parseInt(dateStr.substring(6, 8), 10);
+  try {
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return null;
 
-  const date = new Date(year, month, day);
-  // 유효하지 않은 날짜(예: 20250230)인지 확인
-  if (isNaN(date.getTime())) return null;
-
-  return date;
+    // 시간, 분, 초, 밀리초를 0으로 설정하여 날짜만 비교
+    date.setHours(0, 0, 0, 0);
+    return date;
+  } catch (e) {
+    return null;
+  }
 };
 
 /**
  * 현재 날짜를 기준으로 모집 상태(모집중, 모집예정, 모집마감)와
  * 남은 기간 텍스트를 계산하여 객체로 반환
- * @param {string | number | null | undefined} startDateValue - 모집 시작일 (YYYYMMDD)
- * @param {string | number | null | undefined} endDateValue - 모집 종료일 (YYYYMMDD)
+ * @param {string | null | undefined} startDateValue - 모집 시작일 (ISO String)
+ * @param {string | null | undefined} endDateValue - 모집 종료일 (ISO String)
  * @returns {{statusText: string, daysRemainingText: string}}
- * - statusText: "모집중", "모집예정", "모집마감"
- * - daysRemainingText: "X일 남음", "오늘 마감", "모집 예정", "모집 마감", "정보 없음"
  */
-export const getRecruitmentStatus = (startDateValue, endDateValue) => {
-  const now = new Date(); // 새로운 Date 객체 생성
-  now.setHours(0, 0, 0, 0); // 시간은 무시하고 날짜만 비교하기 위해 자정으로 설정
+export function getRecruitmentStatus(startDateValue, endDateValue) {
+  const now = new Date();
+  now.setHours(0, 0, 0, 0); // 시간은 무시하고 날짜만 비교
 
   const startDate = parseDate(startDateValue);
   const endDate = parseDate(endDateValue);
 
-  // 날짜 정보가 유효하지 않으면 '모집마감'으로 처리
   if (!startDate || !endDate) {
     return {
-      statusText: "모집마감",
-      daysRemainingText: "정보 없음",
+      statusText: '모집마감',
+      daysRemainingText: '정보 없음',
     };
   }
 
-  // 현재가 시작일보다 전이면 '모집예정'
-  if (now < startDate) {
-    return {
-      statusText: "모집예정",
-      daysRemainingText: "모집 예정",
-    };
-    // 현재가 종료일보다 후면 '모집마감'
-  } else if (now > endDate) {
-    return {
-      statusText: "모집마감",
-      daysRemainingText: "모집 마감",
-    };
+  // !! 중요: endDate는 18:00 등에 마감하므로, 날짜 비교 시 +1일 또는 시간 포함 비교 필요
+  // 여기서는 parseDate가 시간을 00:00으로 맞추므로, endDate 당일도 '모집중'이 되도록
+  // endDate.getTime() 대신 endDate의 날짜 기준으로 비교
 
-    // 그 외의 경우 (시작일과 종료일 사이)는 '모집중'
-  } else {
-    // 남은 날짜 계산
-    const diffTime = endDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays < 0)
-      return {
-        statusText: "모집마감",
-        daysRemainingText: "모집 마감",
-      };
-    if (diffDays === 0)
-      return {
-        statusText: "모집중",
-        daysRemainingText: "오늘 마감",
-      };
+  // (예: 마감일이 11월 10일이면, 11월 10일 23:59:59까지는 모집중이어야 함)
+  // parseDate에서 이미 시간을 00:00:00으로 맞췄으므로 로직은 동일하게 작동
+  // now (오늘 00시) < startDate (시작일 00시) -> 모집예정
+  // now (오늘 00시) > endDate (마감일 00시) -> 모집마감
+
+  if (now < startDate) {
+    // 시작일 전
     return {
-      statusText: "모집중",
+      statusText: '모집예정',
+      daysRemainingText: '모집 예정',
+    };
+  }
+  if (now > endDate) {
+    // 마감일 지남
+    return {
+      statusText: '모집마감',
+      daysRemainingText: '모집 마감',
+    };
+  }
+  if (now >= startDate && now <= endDate) {
+    // 모집 기간 중 (시작일 <= 오늘 <= 마감일)
+    const diffTime = endDate.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); // 남은 날짜 계산
+
+    if (diffDays === 0) {
+      return {
+        statusText: '모집중',
+        daysRemainingText: '오늘 마감',
+      };
+    }
+    return {
+      statusText: '모집중',
       daysRemainingText: `${diffDays}일 남음`,
     };
   }
-};
+  return 0; // 아무것도 하지 않을 시 0 리턴
+}

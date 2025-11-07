@@ -1,7 +1,7 @@
 import { useParams, useSearchParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import mmaData from '../data/mmaData.json'; // 로컬 JSON 불러오기
+import { useState } from 'react';
 import styles from '../css/DetailPage.module.css';
+import useSpecialtyData from '../hooks/useSpecialtyData';
 
 /**
  * [DetailPage 컴포넌트]
@@ -15,34 +15,11 @@ export default function DetailPage() {
   const [searchParams] = useSearchParams();
   const name = searchParams.get('name') || '특기 정보'; // URL에서 ?name= 값
 
-  // 로딩 상태
-  const [loading, setLoadingState] = useState(true);
-  // 에러 상태
-  const [error, setError] = useState(null);
-  // 현재 활성화된 탭 ID (기본값: 'mission')
+  // 현재 활성화된 탭 ID
   const [activeTab, setActiveTab] = useState('mission');
-  // JSON에서 찾은 특기 데이터 전체 (html, planHtml, noticeHtml 포함)
-  const [specialtyData, setSpecialtyData] = useState(null);
 
-  // --- 데이터 로딩 Effect ---
-  useEffect(() => {
-    setLoadingState(true);
-    setError(null);
-    setSpecialtyData(null);
-
-    // mmaData에서 URL의 id와 일치하는 항목을 검색
-    const foundData = mmaData.find((MOS) => MOS.id === id);
-
-    if (foundData) {
-      // 데이터를 찾으면 전체 객체를 상태에 저장
-      setSpecialtyData(foundData);
-    } else {
-      // 데이터가 없으면 에러 메시지 설정
-      setError(`ID ${id} 에 해당하는 캐시된 데이터가 없습니다.`);
-    }
-
-    setLoadingState(false);
-  }, [id]); // `id` 값이 바뀔 때만 재실행
+  // 커스텀 Hook으로 데이터 로직 처리
+  const { loading, error, data: specialtyData } = useSpecialtyData(id);
 
   // 로딩 중일 때
   if (loading) {

@@ -1,12 +1,26 @@
-import { XMLParser } from 'fast-xml-parser'; // XML 문자열을 JS 객체로 변환해주는 라이브러리
 import { mockRecuritments } from '../data/MockData';
+import { getRecruitmentStatus } from '../utils/dateUtils';
 
-// 비동기 함수로 호출하여 API에서 데이터를 가져오는 작업 시작
-export const fetchRecruitments = async () => {
-  // 공공데이터 화재로 인한 mockData 사용
-  // API 호출 코드 삭제
+export default async function fetchRecruitments() {
+  // Mock 데이터를 가져와서 현재 날짜 기준 'status' 필드를 동적으로 추가
+  const processedItems = mockRecuritments.map((item) => {
+    const { statusText, daysRemainingText } = getRecruitmentStatus(
+      item.applyStart,
+      item.applyEnd,
+    );
 
-  console.log('로컬 Mock 데이터에서 탐색중...');
+    return {
+      ...item,
+      status: statusText, // DB 스키마에 status 필드가 있지만, 동적 계산값으로 덮어쓰기
+      daysRemainingText: daysRemainingText, // Card에서 사용하기 편하도록 추가
+    };
+  });
 
-  return mockRecuritments;
-};
+  // '모집마감' 상태인 공고는 제외
+  // 추후 DB 에서는 모집마감 상태인 공고는 아예 안올것
+  const availableNotice = processedItems.filter(
+    (item) => item.status !== '모집마감',
+  );
+
+  return availableNotice;
+}
