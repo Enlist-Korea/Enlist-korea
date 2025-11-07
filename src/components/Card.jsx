@@ -115,7 +115,8 @@ export default function Card({ item }) {
           </div>
 
           {/* 상세 정보 그리드 */}
-          <div className={styles.detailsGrid}>
+          {/* <div className={styles.detailsGrid}> */}
+          <div className={`${styles.detailsGrid}${styles.fullWidth}`}>
             <DetailItem label="선발" value={`${item.seonbalPcnt}명`} />
             <DetailItem label="접수" value={`${item.jeopsuPcnt}명`} />
             <DetailItem
@@ -135,11 +136,7 @@ export default function Card({ item }) {
         <div className={styles.cardFooter}>
           <Link
             className={styles.applyButton}
-            to={`/details/${item.gsteukgiCd}?name=${
-              item.gsteukgiNm
-            }&gun=${GUN_CODE_MAP[item.gunGbnm]}&mojip=${
-              MOJIP_CODE_MAP[item.mojipGbnm]
-            }`}
+            to={`/details/${item.gsteukgiCd}?name=${item.gsteukgiNm}`}
           >
             자세히 보기
           </Link>

@@ -124,6 +124,7 @@
   gap: 1rem;
   font-size: 0.9rem;
 }
+
 .detailItem {
   display: flex;
   justify-content: space-between;
@@ -131,6 +132,11 @@
   background-color: rgba(255, 255, 255, 0.03);
   border-radius: 4px;
 }
+
+.fullWidth {
+  grid-column: 1 / -1;
+}
+
 .detailLabel {
   color: var(--secondary-text-color);
 }
@@ -145,7 +151,7 @@
 }
 .applyButton {
   display: block;
-  width: 100%;
+  width: 93%;
   padding: 0.8rem;
   text-align: center;
   background: var(--accent-color-blue);
