@@ -156,7 +156,7 @@ function CardDetailsGrid({
   enlistStart,
 }) {
   return (
-    <div className={`${styles.detailsGrid} ${styles.fullWidth}`}>
+    <div className={`${styles.detailsGrid}${styles.fullWidth}`}>
       <DetailItem label="선발" value={`${quota}명`} />
       <DetailItem label="접수" value={`${jeopsuPcnt}명`} />
       <DetailItem
