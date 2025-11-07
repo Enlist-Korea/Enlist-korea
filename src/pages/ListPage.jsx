@@ -20,7 +20,7 @@ export default function ListPage() {
   /**
    * 데이터 로딩 함수 (api.js가 변환 및 필터링 담당)
    */
-  const onceLoadData = async () => {
+  const loadData = async () => {
     setIsLoading(true);
     setError(null);
 
@@ -43,7 +43,7 @@ export default function ListPage() {
    * 컴포넌트가 처음 마운트될 때 loadData() 함수 1회 실행
    */
   useEffect(() => {
-    onceLoadData();
+    loadData();
   }, []);
 
   /**
