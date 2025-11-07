@@ -1,7 +1,6 @@
-// 백엔드 DB 스키마에 맞게 수정된 Mock 데이터
 export const mockRecuritments = [
   {
-    id: 'mock-1', // React Key용 고유 ID
+    id: 1, // React Key용 고유 ID
     branch: '육군',
     mojipGbnm: '기술행정병',
     code: '133.106',
@@ -14,7 +13,7 @@ export const mockRecuritments = [
     rate: 1.5,
   },
   {
-    id: 'mock-2',
+    id: 2,
     branch: '육군',
     mojipGbnm: '기술행정병',
     code: '242.101',
@@ -29,7 +28,7 @@ export const mockRecuritments = [
   // --- 오늘 날짜 기준 테스트용 데이터 ---
   // 1. 모집중 (오늘 날짜가 11월 1일 ~ 11월 10일 사이일 경우)
   {
-    id: 'mock-3',
+    id: 3,
     branch: '공군',
     mojipGbnm: '일반병',
     code: '300.101',
@@ -43,7 +42,7 @@ export const mockRecuritments = [
   },
   // 2. 모집예정 (오늘 날짜가 11월 20일 이전일 경우)
   {
-    id: 'mock-4',
+    id: 4,
     branch: '해군',
     mojipGbnm: '부사관',
     code: '200.105',
@@ -57,7 +56,7 @@ export const mockRecuritments = [
   },
   // 3. 모집마감 (오늘 날짜가 10월 31일 이후일 경우)
   {
-    id: 'mock-5',
+    id: 5,
     branch: '해병대',
     mojipGbnm: '기술병',
     code: '400.101',
@@ -70,3 +69,5 @@ export const mockRecuritments = [
     rate: 0.6,
   },
 ];
+
+export default mockRecuritments;
