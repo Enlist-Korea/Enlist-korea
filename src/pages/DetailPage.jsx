@@ -38,84 +38,95 @@ export default function DetailPage() {
     );
   }
 
-  // --- 메인 렌더링 ---
   return (
     <div className={styles.pageContainer}>
       <h1 className={styles.title}>
         {name} ({id})
       </h1>
 
-      <nav className={styles.tabNav}>
-        <button
-          type="button"
-          className={`${styles.tabButton} ${
-            activeTab === 'mission' ? styles.active : ''
-          }`}
-          onClick={() => setActiveTab('mission')}
-        >
-          군사특기임무 및 설명
-        </button>
-        <button
-          type="button"
-          className={`${styles.tabButton} ${
-            activeTab === 'plan' ? styles.active : ''
-          }`}
-          onClick={() => setActiveTab('plan')}
-        >
-          이달의 모집 계획
-        </button>
-        <button
-          type="button"
-          className={`${styles.tabButton} ${
-            activeTab === 'notice' ? styles.active : ''
-          }`}
-          onClick={() => setActiveTab('notice')}
-        >
-          공지사항
-        </button>
-      </nav>
+      {/* 탭 네비게이션 컴포넌트 */}
+      <TabNavigation
+        activeTab={activeTab}
+        onTabClick={setActiveTab} // state 설정 함수를 그대로 넘겨줌
+      />
 
-      <div className={styles.tabContentWrapper}>
-        {/* 탭 1: 군사특기임무 */}
-        <div
-          className={`${styles.tabPane} ${
-            activeTab === 'mission' ? styles.active : ''
-          }`}
-        >
-          <div
-            dangerouslySetInnerHTML={{
-              __html: specialtyData.html,
-            }}
-          />
-        </div>
+      {/* 탭 콘텐츠 컴포넌트 */}
+      <TabContent activeTab={activeTab} data={specialtyData} />
+    </div>
+  );
+}
 
-        {/* 탭 2: 이달의 모집 계획 */}
-        <div
-          className={`${styles.tabPane} ${
-            activeTab === 'plan' ? styles.active : ''
-          }`}
-        >
-          <div
-            dangerouslySetInnerHTML={{
-              __html:
-                specialtyData.planHtml || '<p>모집 계획 정보가 없습니다.</p>',
-            }}
-          />
-        </div>
+function TabNavigation({ activeTab, onTabClick }) {
+  return (
+    <nav className={styles.tabNav}>
+      <button
+        type="button"
+        className={`${styles.tabButton} ${
+          activeTab === 'mission' ? styles.active : ''
+        }`}
+        onClick={() => onTabClick('mission')} // 부모에게 'mission' 클릭을 알림
+      >
+        군사특기임무 및 설명
+      </button>
+      <button
+        type="button"
+        className={`${styles.tabButton} ${
+          activeTab === 'plan' ? styles.active : ''
+        }`}
+        onClick={() => onTabClick('plan')}
+      >
+        이달의 모집 계획
+      </button>
+      <button
+        type="button"
+        className={`${styles.tabButton} ${
+          activeTab === 'notice' ? styles.active : ''
+        }`}
+        onClick={() => onTabClick('notice')}
+      >
+        공지사항
+      </button>
+    </nav>
+  );
+}
 
-        {/* 탭 3: 공지사항 */}
-        <div
-          className={`${styles.tabPane} ${
-            activeTab === 'notice' ? styles.active : ''
-          }`}
-        >
-          <div
-            dangerouslySetInnerHTML={{
-              __html:
-                specialtyData.noticeHtml || '<p>공지사항 정보가 없습니다.</p>',
-            }}
-          />
-        </div>
+function HtmlContentView({ htmlContent, fallbackText = '정보가 없습니다.' }) {
+  const content = htmlContent || `<p>${fallbackText}</p>`;
+  return <div dangerouslySetInnerHTML={{ __html: content }} />;
+}
+
+function TabContent({ activeTab, data }) {
+  return (
+    <div className={styles.tabContentWrapper}>
+      <div
+        className={`${styles.tabPane} ${
+          activeTab === 'mission' ? styles.active : ''
+        }`}
+      >
+        {/* 헬퍼 컴포넌트 사용 */}
+        <HtmlContentView htmlContent={data.html} />
+      </div>
+
+      <div
+        className={`${styles.tabPane} ${
+          activeTab === 'plan' ? styles.active : ''
+        }`}
+      >
+        <HtmlContentView
+          htmlContent={data.planHtml}
+          fallbackText="모집 계획 정보가 없습니다."
+        />
+      </div>
+
+      <div
+        className={`${styles.tabPane} ${
+          activeTab === 'notice' ? styles.active : ''
+        }`}
+      >
+        <HtmlContentView
+          htmlContent={data.noticeHtml}
+          fallbackText="공지사항 정보가 없습니다."
+        />
       </div>
     </div>
   );
