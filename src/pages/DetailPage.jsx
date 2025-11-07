@@ -105,6 +105,7 @@ function TabContent({ activeTab, data }) {
       >
         {/* 헬퍼 컴포넌트 사용 */}
         <HtmlContentView htmlContent={data.html} />
+        <HtmlContentView htmlContent={`정보 업데이트: ${data.lastUpdateDay}`} />
       </div>
 
       <div
