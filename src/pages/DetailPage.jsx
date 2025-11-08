@@ -2,6 +2,7 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import { useState } from 'react';
 import styles from '../css/DetailPage.module.css';
 import useSpecialtyData from '../hooks/useSpecialtyData';
+import mmaNotices from '../data/mmaNotices.json';
 
 /**
  * [DetailPage 컴포넌트]
@@ -40,9 +41,11 @@ export default function DetailPage() {
 
   return (
     <div className={styles.pageContainer}>
-      <h1 className={styles.title}>
-        {name} ({id})
-      </h1>
+      {activeTab !== 'notice' && (
+        <h1 className={styles.title}>
+          {name} ({id})
+        </h1>
+      )}
 
       {/* 탭 네비게이션 컴포넌트 */}
       <TabNavigation
@@ -51,7 +54,11 @@ export default function DetailPage() {
       />
 
       {/* 탭 콘텐츠 컴포넌트 */}
-      <TabContent activeTab={activeTab} data={specialtyData} />
+      <TabContent
+        activeTab={activeTab}
+        data={specialtyData}
+        notices={mmaNotices}
+      />
     </div>
   );
 }
@@ -95,7 +102,7 @@ function HtmlContentView({ htmlContent, fallbackText = '정보가 없습니다.'
   return <div dangerouslySetInnerHTML={{ __html: content }} />;
 }
 
-function TabContent({ activeTab, data }) {
+function TabContent({ activeTab, data, notices }) {
   return (
     <div className={styles.tabContentWrapper}>
       <div
@@ -124,10 +131,32 @@ function TabContent({ activeTab, data }) {
           activeTab === 'notice' ? styles.active : ''
         }`}
       >
-        <HtmlContentView
-          htmlContent={data.noticeHtml}
-          fallbackText="공지사항 정보가 없습니다."
-        />
+        {/* HtmlContentView 대신 'notices' 배열을 map()으로 순회하여 렌더링 */}
+        {/* mmaNotices를 직접 import하여 렌더링 */}
+        <div
+          className={`${styles.tabPane} ${
+            activeTab === 'notice' ? styles.active : ''
+          }`}
+        >
+          <ul className={styles.noticeList}>
+            {notices && notices.length > 0 ? (
+              notices.map((notice) => (
+                <li key={notice.id} className={styles.noticeItem}>
+                  <a
+                    href={notice.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {notice.title}
+                  </a>
+                  <span className={styles.noticeDate}>{notice.date}</span>
+                </li>
+              ))
+            ) : (
+              <p>공지사항 정보가 없습니다.</p>
+            )}
+          </ul>
+        </div>
       </div>
     </div>
   );

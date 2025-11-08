@@ -93,3 +93,37 @@
     padding: 0.5rem;
   }
 }
+
+/* 공지사항 CSS */
+.noticeList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.noticeItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  gap: 1rem;
+}
+
+.noticeItem a {
+  color: var(--primary-text-color);
+  text-decoration: none;
+  font-weight: 500;
+  flex-grow: 1; /* 제목이 남은 공간을 다 차지하도록 */
+}
+
+.noticeItem a:hover {
+  text-decoration: underline;
+  color: var(--accent-color-blue);
+}
+
+.noticeDate {
+  color: var(--secondary-text-color);
+  font-size: 0.9rem;
+  white-space: nowrap; /* 날짜가 줄바꿈되지 않도록 */
+}
