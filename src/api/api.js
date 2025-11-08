@@ -1,9 +1,15 @@
 import { mockRecuritments } from '../data/MockData';
 import { getRecruitmentStatus } from '../utils/dateUtils';
 
+/**
+ * DB에서 가져온 원본 데이터를 프론트에서 사용할 수 있도록 가공하는 함수
+ * @returns {Promise<object[]>} - '모집 중', '모집예정' 공고 객체만 담긴 배열을 이행하는 Promise
+ */
 export default async function fetchRecruitments() {
   // Mock 데이터를 가져와서 현재 날짜 기준 'status' 필드를 동적으로 추가
   const processedItems = mockRecuritments.map((item) => {
+    // 각 item의 모집 시작일과 모집 마감일 값을 getRecruitmentStatus 함수에 전달
+    // getRecruitmentStatus 함수는 계산 후 객체 반환
     const { statusText, daysRemainingText } = getRecruitmentStatus(
       item.applyStart,
       item.applyEnd,
@@ -12,7 +18,7 @@ export default async function fetchRecruitments() {
     return {
       ...item,
       status: statusText, // DB 스키마에 status 필드가 있지만, 동적 계산값으로 덮어쓰기
-      daysRemainingText: daysRemainingText, // Card에서 사용하기 편하도록 추가
+      daysRemainingText, // Card에서 사용하기 편하도록 추가
     };
   });
 
