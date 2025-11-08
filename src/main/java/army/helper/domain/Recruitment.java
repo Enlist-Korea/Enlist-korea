@@ -3,6 +3,7 @@ package army.helper.domain;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
@@ -13,6 +14,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Getter
 @Table(name = "recruitments",
         uniqueConstraints = @UniqueConstraint(columnNames = {"specialty_id","intake_id"}))
 public class Recruitment { //모집 현황에 대한 정보를 담고 있는 엔티티
@@ -32,6 +34,9 @@ public class Recruitment { //모집 현황에 대한 정보를 담고 있는 엔
 
     @Column(nullable = false, length = 32)
     private String code; //특기 번호
+
+    @Column(nullable = false, length = 100)
+    private String specialtyName;
 
     @ManyToOne
     private Intake intake;
