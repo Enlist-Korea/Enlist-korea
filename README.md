@@ -26,39 +26,7 @@ Vite 개발 서버 주소(예: `http://localhost:5173`)로 접속하여 페이�
 
 ---
 
-## 폴더 구조
 
-```
-your-project/
-├─ public/                              # 정적 리소스(파비콘/OG 이미지 등)
-│  └─ favicon.ico                       # (선택) 브라우저 탭 아이콘
-├─ src/                                 # 프론트엔드 소스
-│  ├─ api/
-│  │  └─ bonus.js                       # 점수 옵션/계산 API 호출 + 군 분류 더미
-│  ├─ components/
-│  │  ├─ BranchTabs.jsx                 # 군 분류 탭 UI(육군/해군/해병대/공군)
-│  │  ├─ SubcatChips.jsx                # 세부 카테고리 칩 UI
-│  │  ├─ BonusModal.jsx                 # 입력 모달(+ /api 연동 폼)
-│  │  └─ ResultCard.jsx                 # 결과 요약 카드(총점/선택 요약)
-│  ├─ pages/
-│  │  └─ BonusPage.jsx                  # 메인 화면: 탭/칩/모달/결과 조립·상태
-│  ├─ utils/
-│  │  └─ bonusUtils.js                  # 점수 포맷 등 공용 함수
-│  ├─ assets/                           # (선택) 프론트 전용 이미지/아이콘
-│  ├─ style.css                         # 프로젝트 공통 스타일
-│  ├─ App.jsx                           # 앱 루트(라우팅 기점)
-│  └─ main.jsx                          # React 진입점(#root 마운트)
-├─ index.html                           # Vite 엔트리 HTML
-├─ vite.config.js                       # Vite 개발 서버/프록시 설정
-├─ .env.example                         # 환경변수 샘플(VITE_API_BASE_URL 등)
-├─ .gitignore                           # 빌드 산출물/환경파일 무시
-└─ README.md                            # 실행/구성 문서(본 파일)
-```
-
-> 이미지로 표시하고 싶다면 `public/` 아래에 다이어그램을 두고 다음과 같이 참조하세요:  
-> `![폴더 구조](folder_structure.png)`
-
----
 
 ## 데이터 흐름 (Front → Back)
 
@@ -93,25 +61,6 @@ export default defineConfig({
   },
 });
 ```
-
-### 2) 절대 경로 호출(.env 사용)
-프록시 대신 환경변수로 백엔드 주소 설정:
-
-```bash
-# .env.example (레포에 커밋 O) — 팀원 공유용 샘플
-VITE_API_BASE_URL=https://api.example.com
-```
-
-팀원/개발자는 복사 후 실제 주소로 설정:
-```bash
-cp .env.example .env
-# .env (커밋 X)
-VITE_API_BASE_URL=http://localhost:8080
-```
-
-`src/api/bonus.js`는 `VITE_API_BASE_URL`이 있으면 절대경로, 없으면 프록시(`/api`)를 사용합니다.
-
----
 
 ## FAQ
 
