@@ -1,17 +1,21 @@
 package army.helper.service;
 
+import army.helper.domain.Branch;
 import army.helper.domain.Recruitment;
 import army.helper.domain.Specialty;
+import army.helper.dto.RecruitmentStatusResponse;
 import army.helper.dto.RequirementApiDto;
 import army.helper.infrastructure.ApiClient;
 import army.helper.repository.RecruitmentRepository;
 import army.helper.repository.SpecialtyRepository;
+import java.util.ArrayList;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -22,39 +26,81 @@ public class RecruitSyncService {
     private final RecruitmentRepository recruitmentRepository;
     private final SpecialtyRepository specialtyRepository;
 
-    private String mapApiToStandardCode(String apiCode){
-        return "ST_" + apiCode;
-    }
-
-    public int syncAll(){
+    public int syncAll() {
         log.info("Starting data synchronization process.");
-        List<Recruitment> recruitments = apiClient.fetchCurrentRecruitments();
-        List<RequirementApiDto> requirementApiDto = apiClient.fetchCurrentRecruitRequirements();
 
+        // API 데이터 호출
+        List<RecruitmentStatusResponse> recruitments = apiClient.fetchCurrentRecruitments();
+        List<RequirementApiDto> requirements = apiClient.fetchCurrentRecruitRequirements();
+
+        //  기존 데이터 삭제
         recruitmentRepository.deleteAll();
         specialtyRepository.deleteAll();
 
-        recruitmentRepository.saveAll(recruitments);
-        log.info("Saved() recruiments", recruitments.size());
+        // ⃣ 모집 현황 저장
+        List<Recruitment> recruitmentEntities = recruitments.stream()
+                .filter(dto -> hasText(dto.getSpecialtyCode()))
+                .map(RecruitmentMapper::toEntity)
+                .toList();
 
-        List<Specialty> specialtiesToSave = mapRequirementToSpecialties(requirementApiDto);
-        specialtyRepository.saveAll(specialtiesToSave);
-        log.info("Saved() specialties", specialtiesToSave.size());
-        return recruitments.size();
+        recruitmentRepository.saveAll(recruitmentEntities);
+        log.info("Saved recruitments: {}", recruitmentEntities.size());
+
+
+        List<Specialty> allSpecialties = recruitmentEntities.stream()
+                .flatMap(r -> mapRequirementToSpecialties(requirements, r.getBranch()).stream())
+                .peek(s -> log.info("🔍 specialty branch={}, code={}, name={}", s.getBranch(), s.getCode(), s.getName()))
+                .filter(s -> s.getBranch() != null && s.getCode() != null) // null 코드 제거
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toMap(
+                                s -> s.getBranch().name() + "|" + s.getCode(), // (branch, code) 키
+                                Function.identity(),
+                                (a, b) -> a,
+                                LinkedHashMap::new
+                        ),
+                        m -> new ArrayList<>(m.values())
+                ));
+
+        specialtyRepository.saveAll(allSpecialties);
+        log.info("Saved specialties: {}", allSpecialties.size());
+
+        return recruitmentEntities.size();
     }
 
-    private List<Specialty> mapRequirementToSpecialties(List<RequirementApiDto> requirements){
-        return requirements.stream().map(req -> {
-            String major = req.getMajorRequirement();
-            String certName = req.getCertificateName();
+    //  branch enum 타입으로 직접 주입
+    private List<Specialty> mapRequirementToSpecialties(List<RequirementApiDto> requirements, Branch branch) {
+        return requirements.stream()
+                .map(req -> Specialty.builder()
+                        .branch(branch) //
+                        .code(mapApiToStandardCode(req.getSpecialtyCode(), req.getSpecialtyName()))
+                        .mojipGbnm(req.getMojipGbnm() != null ? req.getMojipGbnm() : "기술병")
+                        .name(req.getSpecialtyName() != null && !req.getSpecialtyName().isBlank()
+                                ? req.getSpecialtyName()
+                                : req.getMajorRequirement() != null
+                                        ? req.getMajorRequirement()
+                                        : "미상특기")
+                        .requiredCertificateName(hasText(req.getCertificateName()) ? req.getCertificateName() : null)
+                        .requiredMajorNames(hasText(req.getMajorRequirement()) ? req.getMajorRequirement() : null)
+                        .active(true)
+                        .build())
+                .filter(s -> s != null) // null Specialty 제거
+                .toList();
 
-            return Specialty.builder()
-                    .branch(req.getStatus())
-                    .code(mapApiToStandardCode(req.getSpecialtyCode()))
-                    .name(req.getSpecialtyName())
-                    .requiredCertificateName(certName != null && !certName.isBlank() ? certName:null)
-                    .requiredMajorNames(major != null && !major.isBlank() ?major:null)
-                    .build();
-        }).collect(Collectors.toList());
+    }
+
+
+
+    private String mapApiToStandardCode(String apiCode, String fallbackName) {
+        if (apiCode == null || apiCode.isBlank() || "null".equalsIgnoreCase(apiCode)) {
+            if (fallbackName != null && !fallbackName.isBlank()) {
+                return "ST_GEN_" + Math.abs(fallbackName.trim().toLowerCase().hashCode()); // 결정적 대체키
+            }
+            return null; // 코드 생성 불가
+        }
+        return "ST_" + apiCode.trim().toUpperCase();
+    }
+
+    private static boolean hasText(String text) {
+        return text != null && !text.isBlank();
     }
 }
