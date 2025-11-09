@@ -1,33 +1,50 @@
 package army.helper.controller;
 
+import army.helper.dto.RecruitmentStatusListResponse;
 import army.helper.dto.RecruitmentStatusResponse;
 import army.helper.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/recruitments")
 @RequiredArgsConstructor
+@Slf4j
 public class RecruitmentController {
+
     private final RecruitmentService recruitmentService;
 
-    @GetMapping("/status")
-    public ResponseEntity<List<RecruitmentStatusResponse>> getAvailableRecruitment(
-            @RequestParam(value = "status", required = false) String status,
-            @RequestParam(value = "specialtyName", required = false) String specialtyName,
-            @RequestParam(value = "statusType", required = false) String statusType
+    /**
+     * 🪖 모집 현황 전체 조회 + 필터링 지원
+     * - JSON 배열 형식으로 반환
+     * - 파라미터가 없으면 전체 조회
+     */
+    // 1. 'produces'를 JSON으로 변경
+    @GetMapping(value = "/status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<RecruitmentStatusResponse>> getRecruitmentStatus( // 2. 반환 타입을 List<...>로 변경
+                                                                                 @RequestParam(required = false) String status,
+                                                                                 @RequestParam(required = false) String specialtyName,
+                                                                                 @RequestParam(required = false) String statusType
     ) {
-        List<RecruitmentStatusResponse> result = recruitmentService.findStatusByFilters(
-                status,
-                specialtyName,
-                statusType);
+        log.info("🎯 Request /status with filters: status={}, specialtyName={}, statusType={}",
+                status, specialtyName, statusType);
 
-        return ResponseEntity.ok(result);
+        List<RecruitmentStatusResponse> recruitments =
+                recruitmentService.findStatusByFilters(status, specialtyName, statusType);
+
+        log.info("✅ Retrieved {} recruitment records", recruitments.size());
+
+        // 3. RecruitmentStatusListResponse 래퍼 빌드 로직 제거
+        // RecruitmentStatusListResponse response = RecruitmentStatusListResponse.build(recruitments);
+
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_JSON) // 4. contentType JSON으로 변경
+                .body(recruitments); // 5. 'recruitments' 리스트를 직접 body에 전달
     }
 }
