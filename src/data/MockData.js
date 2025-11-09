@@ -1,7 +1,7 @@
 export const mockRecuritments = [
   {
     id: 1, // React Key용 고유 ID
-    branch: '육군',
+    branch: 'ARMY',
     mojipGbnm: '기술행정병',
     code: '133.106',
     name: '포병레이더',
@@ -14,7 +14,7 @@ export const mockRecuritments = [
   },
   {
     id: 2,
-    branch: '육군',
+    branch: 'ARMY',
     mojipGbnm: '기술행정병',
     code: '242.101',
     name: '전장이동통제',
@@ -29,7 +29,7 @@ export const mockRecuritments = [
   // 1. 모집중 (오늘 날짜가 11월 1일 ~ 11월 10일 사이일 경우)
   {
     id: 3,
-    branch: '공군',
+    branch: 'AIR',
     mojipGbnm: '일반병',
     code: '300.101',
     name: '일반',
@@ -43,7 +43,7 @@ export const mockRecuritments = [
   // 2. 모집예정 (오늘 날짜가 11월 20일 이전일 경우)
   {
     id: 4,
-    branch: '해군',
+    branch: 'NAVY',
     mojipGbnm: '부사관',
     code: '200.105',
     name: '전자전',
@@ -57,7 +57,7 @@ export const mockRecuritments = [
   // 3. 모집마감 (오늘 날짜가 10월 31일 이후일 경우)
   {
     id: 5,
-    branch: '해병대',
+    branch: 'MARINES',
     mojipGbnm: '기술병',
     code: '400.101',
     name: '전차 승무',

@@ -3,6 +3,7 @@ import Card from '../components/Card';
 import Loader from '../components/Loader';
 import fetchRecruitments from '../api/api';
 import styles from '../css/ListPage.module.css';
+import getKoreanForceName from '../utils/mappingForceName';
 
 export default function ListPage() {
   // --- 상태 관리 ---
@@ -26,9 +27,13 @@ export default function ListPage() {
 
     try {
       const fetchedItems = await fetchRecruitments();
+      const mappedItems = fetchedItems.map((item) => ({
+        ...item,
+        branch: getKoreanForceName(item.branch), // 영문 군별 이름매핑 함수 적용
+      }));
 
-      setOriginalItems(fetchedItems);
-      setFilteredItems(fetchedItems);
+      setOriginalItems(mappedItems);
+      setFilteredItems(mappedItems);
     } catch (err) {
       setError('데이터를 불러오는 중 오류가 발생했습니다.');
       error.message(err);
@@ -55,7 +60,7 @@ export default function ListPage() {
     // 검색어 필터링
     if (searchTermFilteredValue) {
       filterSearchResults = filterSearchResults.filter((item) =>
-        item.name.includes(searchTermFilteredValue),
+        item.name.includes(searchTermFilteredValue.toLowerCase()),
       );
     }
 
