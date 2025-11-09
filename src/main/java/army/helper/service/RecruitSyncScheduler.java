@@ -1,10 +1,10 @@
 package army.helper.service;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 @Component
 @RequiredArgsConstructor
@@ -12,6 +12,10 @@ import org.springframework.stereotype.Repository;
 public class RecruitSyncScheduler {
 
     private final RecruitSyncService service;
+    @PostConstruct
+    public void initFetch() {
+        service.syncAll();
+    }
 
     @Scheduled(cron = " 0 15 5 * * *", zone = "Asia/Seoul")
     public void runDaily(){
