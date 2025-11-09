@@ -14,14 +14,15 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name ="specialties"
     ,uniqueConstraints = @UniqueConstraint(columnNames = {"branch", "code"}))
-public class Specialty { // 특기별 지원 가능 정보를 담고 있는 엔티티 (--학과)
+public class Specialty extends BaseEntity { // 특기별 지원 가능 정보를 담고 있는 엔티티 (--학과)
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 10)
-    private String branch;
+    @Enumerated(EnumType.STRING)
+    private Branch branch;
 
     @Column(nullable = false, length = 20)
     private String mojipGbnm; //모집구분명(장교,부사관 etc)
@@ -40,4 +41,29 @@ public class Specialty { // 특기별 지원 가능 정보를 담고 있는 엔�
     @Column(nullable = true, length = 255)
     private String requiredMajorNames;
 
+    // 데이터의 활성화 상태 (필터링 용이)
+    @Column(name = "is_active", nullable = false)
+    @Builder.Default
+    private boolean active = true; // 기본값 true로 설정
+
+    @Builder
+    public Specialty(
+            Branch branch,
+            String mojipGbnm,
+            String code,
+            String name,
+            String summary,
+            String requiredCertificateName,
+            String requiredMajorNames,
+            Boolean active
+    ) {
+        this.branch = branch;
+        this.mojipGbnm = mojipGbnm;
+        this.code = code;
+        this.name = name;
+        this.summary = summary;
+        this.requiredCertificateName = requiredCertificateName;
+        this.requiredMajorNames = requiredMajorNames;
+        this.active = active != null ? active : true;
+    }
 }
