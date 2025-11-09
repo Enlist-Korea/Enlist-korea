@@ -119,7 +119,9 @@ function CardKeyStats({ daysRemainingText, rate }) {
         <span className={styles.statLabel}>남은 기간</span>
       </div>
       <div className={styles.statItem}>
-        <span className={styles.statValue}>{(rate || 0).toFixed(1)}</span>
+        <span className={styles.statValue}>
+          {(Number(rate) || 0).toFixed(1)}
+        </span>
         <span className={styles.statLabel}>경쟁률</span>
       </div>
     </div>
@@ -132,7 +134,7 @@ function CardKeyStats({ daysRemainingText, rate }) {
  */
 function CardCompetitionBar({ rate }) {
   const competitionRate = rate || 0;
-  const progressBarWidth = Math.min((competitionRate / 10) * 100, 100);
+  const progressBarWidth = Math.min((competitionRate / 50) * 100, 100);
 
   return (
     <div className={styles.competitionBar}>
