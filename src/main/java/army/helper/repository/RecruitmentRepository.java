@@ -1,5 +1,6 @@
 package army.helper.repository;
 
+import army.helper.domain.Branch; // 1. Branch 임포트
 import army.helper.domain.Recruitment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,13 +13,16 @@ import java.util.List;
 @Repository
 public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> {
 
+    // 2. [수정] JOIN FETCH -> LEFT JOIN FETCH
     @Query("SELECT r FROM Recruitment r " +
-            "JOIN FETCH r.specialty " +
-            "WHERE(:branch IS NULL OR r.branch =:branch) " +
+            "LEFT JOIN FETCH r.specialty " +
+            "WHERE (:branch IS NULL OR r.branch = :branch) " + // 3. [수정] :branch는 이제 Enum
+            // 4. [추가] specialtyName 필터 추가 (r.specialtyName은 Recruitment 엔티티의 필드)
+            "AND (:mojipGbnm IS NULL OR r.specialtyName LIKE %:mojipGbnm%) " +
             "ORDER BY r.applyStart DESC ")
     List<Recruitment> findFileRecruitments(
-            @Param("branch") String branch,
-            @Param("mojipGbnm") String mojipGbnm,
+            @Param("branch") Branch branch, // 5. [수정] String -> Branch 타입
+            @Param("mojipGbnm") String mojipGbnm, // (Service의 specialtyName이 여기로 옴)
             @Param("now")OffsetDateTime now
     );
 }
