@@ -207,7 +207,7 @@ export default function BonusPage() {
       setBonusForm(form);
       if (USE_MOCK) setBonusScore(calcBonusMock(form));
     }
-    setMessage(`${section} 입력 저장됨`);
+    
     closeSec();
   };
 
