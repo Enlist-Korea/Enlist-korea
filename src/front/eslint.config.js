@@ -1,4 +1,4 @@
-import js from '@eslint/js';
+import js from '@eslint/js/types';
 import globals from 'globals';
 import { FlatCompat } from '@eslint/eslintrc';
 import path from 'path';
