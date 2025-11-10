@@ -1,4 +1,4 @@
-package army.helper.domain;
+package army.helper.domain.recruitment_status;
 
 import java.util.Locale;
 
