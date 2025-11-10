@@ -14,6 +14,9 @@ jobs:
   crawl-and-commit:
     runs-on: ubuntu-22.04 # Linux 환경에서 실행
 
+    permissions:
+      contents: write # 'contents'에 대한 'write' 권한을 부여 (push를 위함)
+
     steps:
       # 1. Git 저장소 코드를 불러옴
       - name: Checkout Repository
