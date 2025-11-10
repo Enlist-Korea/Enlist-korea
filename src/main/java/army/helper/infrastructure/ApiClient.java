@@ -1,10 +1,10 @@
 package army.helper.infrastructure;
 
 import army.helper.config.ApiProperties;
-import army.helper.dto.RecruitmentStatusListResponse;
-import army.helper.dto.RecruitmentStatusResponse;
-import army.helper.dto.RequirementApiDto;
-import army.helper.dto.RequirementListResponse;
+import army.helper.dto.recruitment_status.RecruitmentStatusListResponse;
+import army.helper.dto.recruitment_status.RecruitmentStatusResponse;
+import army.helper.dto.recruitment_status.RequirementApiDto;
+import army.helper.dto.recruitment_status.RequirementListResponse;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;

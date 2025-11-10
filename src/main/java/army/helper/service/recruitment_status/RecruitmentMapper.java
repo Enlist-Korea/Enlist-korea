@@ -1,8 +1,8 @@
-package army.helper.service;
+package army.helper.service.recruitment_status;
 
-import army.helper.domain.Branch;
-import army.helper.domain.Recruitment;
-import army.helper.dto.RecruitmentStatusResponse;
+import army.helper.domain.recruitment_status.Branch;
+import army.helper.domain.recruitment_status.Recruitment;
+import army.helper.dto.recruitment_status.RecruitmentStatusResponse;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

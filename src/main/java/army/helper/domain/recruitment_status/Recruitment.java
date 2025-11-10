@@ -1,6 +1,6 @@
-package army.helper.domain;
+package army.helper.domain.recruitment_status;
 
-import army.helper.dto.RecruitmentStatusResponse;
+import army.helper.dto.recruitment_status.RecruitmentStatusResponse;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

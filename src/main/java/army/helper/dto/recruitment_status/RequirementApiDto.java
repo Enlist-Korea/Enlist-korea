@@ -1,4 +1,4 @@
-package army.helper.dto;
+package army.helper.dto.recruitment_status;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Data;

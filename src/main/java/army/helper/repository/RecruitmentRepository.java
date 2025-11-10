@@ -1,7 +1,7 @@
 package army.helper.repository;
 
-import army.helper.domain.Branch; // 1. Branch 임포트
-import army.helper.domain.Recruitment;
+import army.helper.domain.recruitment_status.Branch; // 1. Branch 임포트
+import army.helper.domain.recruitment_status.Recruitment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

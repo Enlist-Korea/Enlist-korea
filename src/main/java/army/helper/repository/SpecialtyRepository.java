@@ -1,7 +1,7 @@
 package army.helper.repository;
 
-import army.helper.domain.Branch;
-import army.helper.domain.Specialty;
+import army.helper.domain.recruitment_status.Branch;
+import army.helper.domain.recruitment_status.Specialty;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package army.helper.service;
+package army.helper.service.recruitment_status;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;

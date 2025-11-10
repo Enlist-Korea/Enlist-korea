@@ -1,10 +1,10 @@
-package army.helper.service;
+package army.helper.service.recruitment_status;
 
-import army.helper.domain.Branch;
-import army.helper.domain.Recruitment;
-import army.helper.domain.Specialty;
-import army.helper.dto.RecruitmentStatusResponse;
-import army.helper.dto.RequirementApiDto;
+import army.helper.domain.recruitment_status.Branch;
+import army.helper.domain.recruitment_status.Recruitment;
+import army.helper.domain.recruitment_status.Specialty;
+import army.helper.dto.recruitment_status.RecruitmentStatusResponse;
+import army.helper.dto.recruitment_status.RequirementApiDto;
 import army.helper.infrastructure.ApiClient;
 import army.helper.repository.RecruitmentRepository;
 import army.helper.repository.SpecialtyRepository;

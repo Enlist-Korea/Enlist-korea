@@ -1,7 +1,7 @@
-package army.helper.dto;
+package army.helper.dto.recruitment_status;
 
-import army.helper.domain.Branch;
-import army.helper.domain.Recruitment;
+import army.helper.domain.recruitment_status.Branch;
+import army.helper.domain.recruitment_status.Recruitment;
 import com.fasterxml.jackson.annotation.JsonProperty; // 1. @JsonProperty 임포트
 import jakarta.xml.bind.annotation.*;
 import java.math.RoundingMode;

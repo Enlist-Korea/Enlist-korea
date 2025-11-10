@@ -1,8 +1,7 @@
 package army.helper.controller;
 
-import army.helper.dto.RecruitmentStatusListResponse;
-import army.helper.dto.RecruitmentStatusResponse;
-import army.helper.service.RecruitmentService;
+import army.helper.dto.recruitment_status.RecruitmentStatusResponse;
+import army.helper.service.recruitment_status.RecruitmentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
