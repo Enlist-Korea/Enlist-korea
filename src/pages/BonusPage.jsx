@@ -292,51 +292,51 @@ export default function BonusPage() {
       </section>
 
       {/* 4개 섹션 카드 (각 카드 상단에 소계 점수) */}
-      <section className="section grid cols-2">
-        <div className="card">
-          <div className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-            <span>기술자격/면허</span>
-            <div className="kpi"><div className="value">{(Number(qualScore)||0).toFixed(2)}</div><div className="unit">점</div></div>
-          </div>
-          <p className="desc">자격 분류/등급/관련도를 입력하세요.</p>
-          <button className="btn-primary" style={{ width:"100%" }} onClick={() => openSec("qual")}>
-            입력하기
-          </button>
-        </div>
+      <section className="section grid cards-2x2">
+  <div className="card">
+    <h3 className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+      <span>기술자격/면허</span>
+      <div className="kpi"><div className="value">{qualScore.toFixed(2)}</div><div className="unit">점</div></div>
+    </h3>
+    <p className="desc">자격 분류/등급/관련도를 입력하세요.</p>
+    <button className="btn-primary" style={{ width:"100%" }} onClick={() => openSec("qual")}>
+      입력하기
+    </button>
+  </div>
 
-        <div className="card">
-          <div className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-            <span>전공</span>
-            <div className="kpi"><div className="value">{(Number(majorScore)||0).toFixed(2)}</div><div className="unit">점</div></div>
-          </div>
-          <p className="desc">전공/학력 상태를 선택하세요.</p>
-          <button className="btn-primary" style={{ width:"100%" }} onClick={() => openSec("major")}>
-            입력하기
-          </button>
-        </div>
+  <div className="card">
+    <h3 className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+      <span>전공</span>
+      <div className="kpi"><div className="value">{majorScore.toFixed(2)}</div><div className="unit">점</div></div>
+    </h3>
+    <p className="desc">전공/학력 상태를 선택하세요.</p>
+    <button className="btn-primary" style={{ width:"100%" }} onClick={() => openSec("major")}>
+      입력하기
+    </button>
+  </div>
 
-        <div className="card">
-          <div className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-            <span>출결사항</span>
-            <div className="kpi"><div className="value">{(Number(attdScore)||0).toFixed(2)}</div><div className="unit">점</div></div>
-          </div>
-          <p className="desc">결석 일수 구간을 선택하세요.</p>
-          <button className="btn-primary" style={{ width:"100%" }} onClick={() => openSec("attd")}>
-            입력하기
-          </button>
-        </div>
+  <div className="card">
+    <h3 className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+      <span>출결사항</span>
+      <div className="kpi"><div className="value">{attdScore.toFixed(2)}</div><div className="unit">점</div></div>
+    </h3>
+    <p className="desc">결석 일수 구간을 선택하세요.</p>
+    <button className="btn-primary" style={{ width:"100%" }} onClick={() => openSec("attd")}>
+      입력하기
+    </button>
+  </div>
 
-        <div className="card">
-          <div className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-            <span>가산점</span>
-            <div className="kpi"><div className="value">{(Number(bonusScore)||0).toFixed(2)}</div><div className="unit">점</div></div>
-          </div>
-          <p className="desc">해당되는 가산 항목을 선택하세요.</p>
-          <button className="btn-primary" style={{ width:"100%" }} onClick={() => openSec("bonus")}>
-            입력하기
-          </button>
-        </div>
-      </section>
+  <div className="card">
+    <h3 className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+      <span>가산점</span>
+      <div className="kpi"><div className="value">{bonusScore.toFixed(2)}</div><div className="unit">점</div></div>
+    </h3>
+    <p className="desc">해당되는 가산 항목을 선택하세요.</p>
+    <button className="btn-primary" style={{ width:"100%" }} onClick={() => openSec("bonus")}>
+      입력하기
+    </button>
+  </div>
+</section>
 
       {/* 결과 카드(총점만 + 결과 확인 버튼 내장) */}
       <section className="section">
