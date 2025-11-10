@@ -1,0 +1,28 @@
+/* --- 전역 설정 및 색상 변수 --- */
+:root {
+  --bg-color: #121212;
+  --card-bg-color: #1e1e24;
+  --primary-text-color: #e0e0e0;
+  --secondary-text-color: #8e8e93;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --accent-color-green: #28a745;
+  --accent-color-blue: #0a84ff;
+  --accent-color-orange: #ff9f0a;
+  --accent-color-gray: #8e8e93;
+  --shadow-color: rgba(0, 0, 0, 0.37);
+  --font-family: "Noto Sans KR", sans-serif;
+}
+
+/* --- 기본 스타일 --- */
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-color);
+  color: var(--primary-text-color);
+  margin: 0;
+  /* padding: 2rem; */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}

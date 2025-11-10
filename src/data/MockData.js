@@ -1,0 +1,73 @@
+export const mockRecuritments = [
+  {
+    id: 1, // React Key용 고유 ID
+    branch: 'ARMY',
+    mojipGbnm: '기술행정병',
+    code: '133.106',
+    name: '포병레이더',
+    quota: 2,
+    jeopsuPcnt: 2,
+    applyStart: '2025-12-01T09:00:00+09:00',
+    applyEnd: '2025-12-04T18:00:00+09:00',
+    enlistStart: '2026-02-01T00:00:00+09:00',
+    rate: 1.5,
+  },
+  {
+    id: 2,
+    branch: 'ARMY',
+    mojipGbnm: '기술행정병',
+    code: '242.101',
+    name: '전장이동통제',
+    quota: 25,
+    jeopsuPcnt: 50,
+    applyStart: '2025-12-05T09:00:00+09:00',
+    applyEnd: '2026-02-02T18:00:00+09:00',
+    enlistStart: '2026-02-01T00:00:00+09:00',
+    rate: 2.2,
+  },
+  // --- 오늘 날짜 기준 테스트용 데이터 ---
+  // 1. 모집중 (오늘 날짜가 11월 1일 ~ 11월 10일 사이일 경우)
+  {
+    id: 3,
+    branch: 'AIR',
+    mojipGbnm: '일반병',
+    code: '300.101',
+    name: '일반',
+    quota: 100,
+    jeopsuPcnt: 150,
+    applyStart: '2025-11-01T09:00:00+09:00',
+    applyEnd: '2025-11-10T18:00:00+09:00',
+    enlistStart: '2026-01-01T00:00:00+09:00',
+    rate: 1.5,
+  },
+  // 2. 모집예정 (오늘 날짜가 11월 20일 이전일 경우)
+  {
+    id: 4,
+    branch: 'NAVY',
+    mojipGbnm: '부사관',
+    code: '200.105',
+    name: '전자전',
+    quota: 10,
+    jeopsuPcnt: 0,
+    applyStart: '2025-11-20T09:00:00+09:00',
+    applyEnd: '2025-11-30T18:00:00+09:00',
+    enlistStart: '2026-03-01T00:00:00+09:00',
+    rate: 0.0,
+  },
+  // 3. 모집마감 (오늘 날짜가 10월 31일 이후일 경우)
+  {
+    id: 5,
+    branch: 'MARINES',
+    mojipGbnm: '기술병',
+    code: '400.101',
+    name: '전차 승무',
+    quota: 20,
+    jeopsuPcnt: 12,
+    applyStart: '2025-10-01T09:00:00+09:00',
+    applyEnd: '2025-10-31T18:00:00+09:00',
+    enlistStart: '2026-01-01T00:00:00+09:00',
+    rate: 0.6,
+  },
+];
+
+export default mockRecuritments;
