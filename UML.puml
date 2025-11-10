@@ -1,35 +1,154 @@
-@startuml EnlistKoreaSequence
-participant User as user
-box "Frontend" #lightgrey
-    participant "App.jsx" as app
-    participant "ListPage.jsx" as listpage
-    participant "Card.jsx" as card
-end box
+' @startuml EnlistKoreaSequence
+' participant User as user
+' box "Frontend" #lightgrey
+'     participant "App.jsx" as app
+'     participant "ListPage.jsx" as listpage
+'     participant "Card.jsx" as card
+' end box
 
-box "Backend" #lightblue
-    participant "Backend Server" as backend
-end box
+' box "Backend" #lightblue
+'     participant "Backend Server" as backend
+' end box
 
-database "Database" as db
+' database "Database" as db
 
-' 1. 사용자 상호작용 및 데이터 요청
-user -> listpage: 1. 특기명 검색 및 필터링
-listpage -> backend: 2. 모집 공고 데이터 요청 (fetch)
+' ' 1. 사용자 상호작용 및 데이터 요청
+' user -> listpage: 1. 특기명 검색 및 필터링
+' listpage -> backend: 2. 모집 공고 데이터 요청 (fetch)
 
-' 2. 백엔드와 데이터베이스 상호작용 (개선 예정 시스템)
-backend -> db: 3. 데이터 조회
-db --> backend: 4. 조회 결과 응답
+' ' 2. 백엔드와 데이터베이스 상호작용 (개선 예정 시스템)
+' backend -> db: 3. 데이터 조회
+' db --> backend: 4. 조회 결과 응답
 
-' 3. 데이터 응답 및 컴포넌트 렌더링
-backend --> listpage: 5. 모집 공고 데이터 응답
-listpage -> card: 6. 각 아이템 데이터를 props로 전달
-activate card
-card -> listpage: 7. 렌더링된 카드 표시
-deactivate card
+' ' 3. 데이터 응답 및 컴포넌트 렌더링
+' backend --> listpage: 5. 모집 공고 데이터 응답
+' listpage -> card: 6. 각 아이템 데이터를 props로 전달
+' activate card
+' card -> listpage: 7. 렌더링된 카드 표시
+' deactivate card
 
-' 4. 라우팅 흐름
-user -> card: 8. "자세히 보기" 버튼 클릭
-card -> app: 9. 상세 페이지 라우팅 요청 (/details/:id)
-app -> user: 10. DetailPage 렌더링
+' ' 4. 라우팅 흐름
+' user -> card: 8. "자세히 보기" 버튼 클릭
+' card -> app: 9. 상세 페이지 라우팅 요청 (/details/:id)
+' app -> user: 10. DetailPage 렌더링
+
+' @enduml
+
+@startuml
+' !theme spacelab
+!theme spacelab
+
+skinparam dpi 150
+skinparam packageStyle rect
+skinparam guifontsize 11
+skinparam defaultFontName "Noto Sans KR"
+skinparam defaultMonospacedFontName "Noto Sans Mono"
+skinparam componentStyle uml2
+
+package "React Application" {
+
+  package "Entrypoint (src)" as MainPackage {
+    [main.jsx] as Main
+    [App.jsx] as App
+    [index.html] as HTML #DDDDDD
+
+    Main --> App : Renders
+    Main ..> HTML : Mounts to #root
+    App ..> MainPackage : Uses global.css
+  }
+
+  package "Router (react-router-dom)" as RouterPackage {
+    component "BrowserRouter" as BrowserRouter
+    component "Routes" as Routes
+    component "Route" as Route
+
+    Main -up-> BrowserRouter : Wraps
+    BrowserRouter -> App
+    App -> Routes
+    Routes -> Route
+  }
+
+  package "Pages (src/pages)" as Pages {
+    [ListPage.jsx] as ListPage
+    [DetailPage.jsx] as DetailPage
+
+    Route ..> ListPage : path="/"
+    Route ..> DetailPage : path="/details/:id"
+  }
+
+  package "Components (src/components)" as Components {
+    [Card.jsx] as Card
+    [Loader.jsx] as Loader
+
+    ListPage --> Card : Renders
+    ListPage --> Loader : Renders
+  }
+
+  package "Hooks (src/hooks)" as Hooks {
+    [useSpecialtyData.js] as useSpecialtyData
+  }
+
+  package "API (src/api)" as Api {
+    [api.js] as ApiClient
+  }
+
+  package "Utils (src/utils)" as Utils {
+    [dateUtils.js] as dateUtils
+    [mappingForceName.js] as mappingForceName
+  }
+
+  package "Static Data (src/data)" as Data {
+    [mmaData.json] as mmaData
+    [mmaNotices.json] as mmaNotices
+    [MockData.js] as MockData
+  }
+
+  package "Styles (src/css)" as CSS {
+    [global.css] as GlobalCSS
+    [ListPage.module.css] as ListPageCSS
+    [DetailPage.module.css] as DetailPageCSS
+    [Card.module.css] as CardCSS
+    [Loader.module.css] as LoaderCSS
+  }
+
+  package "Scripts (scripts)" as Scripts {
+    [front-crawler.js] as Crawler
+    [crawlerConstants.js] as CrawlerConstants
+  }
+}
+
+' --- Relationships ---
+
+' ListPage Dependencies
+ListPage --> ApiClient : fetchRecruitments()
+ListPage --> mappingForceName : getKoreanForceName()
+ListPage ..> ListPageCSS : Imports styles
+
+' DetailPage Dependencies
+DetailPage --> Hooks.useSpecialtyData : useSpecialtyData(id)
+DetailPage --> mmaNotices : Imports directly
+DetailPage ..> DetailPageCSS : Imports styles
+
+' Hook Dependencies
+useSpecialtyData --> mmaData : Imports directly
+
+' API Client Dependencies
+ApiClient --> Utils.dateUtils : getRecruitmentStatus()
+' ApiClient ..> MockData : (Commented out in code)
+
+' Card Dependencies
+Card --> Utils.dateUtils : formatDate(), formatYearMonth()
+Card --> RouterPackage : Uses <Link>
+Card ..> CardCSS : Imports styles
+
+' Loader Dependencies
+Loader ..> LoaderCSS : Imports styles
+
+' Crawler Dependencies
+Crawler --> CrawlerConstants : Imports constants
+Crawler ..> Data : Writes mmaData.json, mmaNotices.json #888888
+
+' CSS Dependencies
+MainPackage --> GlobalCSS : Imported by main.jsx
 
 @enduml
