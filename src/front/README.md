@@ -1,8 +1,8 @@
 # Enlist-Korea (병무청 모집병 조회 서비스)
 
 병무청 공공 API를 활용하여, 현재 지원 가능한 모집병 정보를 한눈에 조회할 수 있는 웹 애플리케이션입니다.
-![alt text](img/MainPage-Screenshot.png)
-![alt text](img/DetailPage-Screenshot.png)
+![alt text](/img/MainPage-Screenshot.png)
+![alt text](/img/DetailPage-Screenshot.png)
 
 ## 프로젝트 소개
 
