@@ -156,25 +156,70 @@ export default function SectionModal({
     </section>
   ));
 
-  const renderAttd = () => (!(rule.attendance?.use) ? null : (
+  
+const renderAttd = () => (
+  !(rule.attendance?.use) ? null : (
     <section className="subcard">
       <h4 style={{ margin: "0 0 10px" }}>
         출결상황 <span className="badge"><strong>배점</strong> 5</span>
       </h4>
+
       <div className="form">
+        {/* 기존: 결석 구간 */}
         <label className="field">
           <span className="label">결석 일수 구간</span>
-          <select className="select" value={form.aAbsent} onChange={setVal("aAbsent")}>
+          <select className="select" value={form.aAbsent ?? "0"} onChange={setVal("aAbsent")}>
             <option value="0">0일 (5점)</option>
             <option value="1-4">1~4일 (4점)</option>
             <option value="5-8">5~8일 (3점)</option>
             <option value="9+">9일 이상 (2점)</option>
           </select>
         </label>
+
+        {/* ✅ 추가: 지각/조퇴/결과 */}
+        <label className="field">
+          <span className="label">지각(회)</span>
+          <input className="input" type="number" min="0" value={form.lateCount ?? 0}
+                 onChange={(e)=>setForm(s=>({...s, lateCount: Math.max(0, Number(e.target.value||0))}))}/>
+        </label>
+
+        <label className="field">
+          <span className="label">조퇴(회)</span>
+          <input className="input" type="number" min="0" value={form.earlyLeave ?? 0}
+                 onChange={(e)=>setForm(s=>({...s, earlyLeave: Math.max(0, Number(e.target.value||0))}))}/>
+        </label>
+
+        <label className="field">
+          <span className="label">결과(회)</span>
+          <input className="input" type="number" min="0" value={form.resultCount ?? 0}
+                 onChange={(e)=>setForm(s=>({...s, resultCount: Math.max(0, Number(e.target.value||0))}))}/>
+        </label>
+
+        {/* ✅ 추가: 특례 플래그 */}
+        <label className="field">
+          <span className="label">생활기록부 미제출</span>
+          <label className="checkbox">
+            <input type="checkbox" checked={!!form.noRecord}
+                   onChange={(e)=>setForm(s=>({...s, noRecord: e.target.checked}))}/>
+            <span>미제출 시 출결 2점 고정</span>
+          </label>
+        </label>
+
+        <label className="field">
+          <span className="label">특례(검정고시/해외학력/초등 이하)</span>
+          <label className="checkbox">
+            <input type="checkbox" checked={!!form.specialAvg}
+                   onChange={(e)=>setForm(s=>({...s, specialAvg: e.target.checked}))}/>
+            <span>평균점수 적용(백엔드 정책값)</span>
+          </label>
+        </label>
       </div>
-      <p className="help">* 중·고교 3년 누계 기준.</p>
+
+      <p className="help">* 지각/조퇴/결과 변환, 미제출/특례 처리 등은 백엔드 규칙으로 계산됩니다.</p>
     </section>
-  ));
+  )
+);
+
 
   const renderBonus = () => {
     if (!rule.bonus?.use) return null;

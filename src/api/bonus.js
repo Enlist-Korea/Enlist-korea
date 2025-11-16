@@ -2,7 +2,7 @@
 const BASE_URL = ""; // Vite 프록시 전제
 
 // ▶ 테스트용 목 스위치(백엔드와 연결시 false로 전환)
-export const USE_MOCK = true;
+export const USE_MOCK = false;
 
 let AUTH_TOKEN = null;
 export function setAuthToken(t){ AUTH_TOKEN = t || null; }
@@ -39,6 +39,36 @@ export async function fetchBonusRules(){
       ]},
     ],
   };
+}
+
+export function fetchRecruitmentStatus(params = {}) {
+  // 빈 값/undefined/null은 쿼리에서 제거
+  const qs = new URLSearchParams(
+    Object.entries(params).reduce((acc, [k, v]) => {
+      if (v !== undefined && v !== null && String(v).trim() !== "") acc[k] = v;
+      return acc;
+    }, {})
+  ).toString();
+
+  return http(`/api/recruitments/status${qs ? `?${qs}` : ""}`);
+}
+// ✅ 전체 병과 점수 계산
+export function requestBranchScores(body) {
+  // body = ScoreRequest (명세서)
+  return http("/api/score/branches", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}
+
+// ✅ 특정 병과 점수 계산 (상세 페이지용)
+export function requestBranchScoreById(criteriaId, body) {
+  return http(`/api/score/branch/${criteriaId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
 }
 
 /* =========================
