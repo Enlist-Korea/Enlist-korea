@@ -16,6 +16,7 @@
 의존성 설치
 ```bash
 npm install
+npm install react-router-dom
 ```
 
 개발 서버 실행
