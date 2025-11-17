@@ -31,7 +31,8 @@
   border: 1px solid var(--border-color);
   margin-top: 1rem;
   align-items: center;
-  max-width: fit-content;
+  /* max-width: fit-content; */
+  box-sizing: border-box;
 }
 
 .searchBar {
@@ -124,11 +125,12 @@
   } */
 
   .filterControls {
+    /* flex-direction: column; */
+    /* align-items: stretch; */
+    padding: 1rem;
+  }
+  /* .filterActions {
     flex-direction: column;
     align-items: stretch;
-  }
-  .filterActions {
-    flex-direction: column;
-    align-items: stretch;
-  }
+  } */
 }
