@@ -4,6 +4,7 @@ import Loader from '../components/Loader';
 import fetchRecruitments from '../api/api';
 import styles from '../css/ListPage.module.css';
 import getKoreanForceName from '../utils/mappingForceName';
+import { getExpandedKeywords } from '../utils/searchKeywords';
 
 export default function ListPage() {
   // --- 상태 관리 ---
@@ -17,6 +18,9 @@ export default function ListPage() {
   const [selectedForce, setSelectedBranch] = useState('전체 군');
   const [selectedType, setSelectedRecuritmentType] = useState('전체 모집 구분');
   const [selectedStatus, setSelectedRecruitmentStatus] = useState('전체 상태');
+
+  // 광범위 검색 상태
+  const [isBroadSearch, setIsBroadSearch] = useState(false);
 
   /**
    * 데이터 로딩 함수 (api.js가 변환 및 필터링 담당)
@@ -56,16 +60,33 @@ export default function ListPage() {
    */
   useEffect(() => {
     let filterSearchResults = [...originalItems];
+    const normalizedSearchTerm = searchTermFilteredValue.toLowerCase();
 
-    // 검색어 필터링
-    if (searchTermFilteredValue) {
-      filterSearchResults = filterSearchResults.filter((item) =>
-        item.name.includes(searchTermFilteredValue.toLowerCase()),
-      );
+    if (normalizedSearchTerm) {
+      // --- 검색 모드에 따라 로직 분기 ---
+      // 광범위 검색
+      if (isBroadSearch) {
+        const keywords = getExpandedKeywords(normalizedSearchTerm);
+
+        filterSearchResults = filterSearchResults.filter((item) => {
+          // item의 이름과 직무 설명을 준비
+          const nameLower = item.name.toLowerCase();
+          const descLower = (item.descriptionText ?? '').toLowerCase(); // null이나 undefined일 경우 빈 배열로 변경 후 toLowerCase()
+
+          return keywords.some(
+            (keyword) =>
+              nameLower.includes(keyword) || descLower.includes(keyword),
+          );
+        });
+      } else {
+        // 기존 검색 로직
+        filterSearchResults = filterSearchResults.filter((item) =>
+          item.name.toLowerCase().includes(normalizedSearchTerm),
+        );
+      }
     }
-
-    // 군종 필터링
     if (selectedForce !== '전체 군') {
+      // 군종 필터링
       filterSearchResults = filterSearchResults.filter(
         (item) => item.branch === selectedForce,
       );
@@ -91,6 +112,7 @@ export default function ListPage() {
     selectedType,
     selectedStatus,
     originalItems,
+    isBroadSearch,
   ]);
 
   // 초기화 버튼 핸들러
@@ -135,13 +157,34 @@ export default function ListPage() {
           <span className={styles.icon}>🔍</span>
           <input
             type="text"
-            placeholder="특기명 검색..." // [수정] item.name 기준 검색
+            // placeholder="특기명 검색..." // [수정] item.name 기준 검색
+            placeholder={
+              isBroadSearch
+                ? '예: "운전" 또는 "사격" (AI 추천)'
+                : '정확한 특기명 검색...'
+            }
             value={searchTermFilteredValue}
             onChange={(ele) => setSearchTerm(ele.target.value)}
           />
         </div>
 
         <div className={`${styles.filterActions} 검색어 입력 & 필터 선택`}>
+          {/* [수정] 검색 모드 토글 버튼 className 수정 */}
+          <button
+            type="button"
+            className={`${styles.resetBtn} ${
+              isBroadSearch ? styles.aiSearchActive : ''
+            }`}
+            onClick={() => setIsBroadSearch((prev) => !prev)}
+            title={
+              isBroadSearch
+                ? '특기명, 직무내용, 연관 키워드까지 검색합니다.'
+                : '특기명에 포함된 단어만 정확히 검색합니다.'
+            }
+          >
+            검색: {isBroadSearch ? 'AI 추천' : '특기명'}
+          </button>
+
           {/* 군종 필터 */}
           <select
             className={`${styles.filterSelect} 군종 필터`}

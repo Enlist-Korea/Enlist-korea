@@ -83,6 +83,25 @@
   cursor: pointer;
 }
 
+/* [추가] AI 추천 검색 활성화 시 적용할 스타일 */
+.aiSearchActive {
+  background-color: var(--accent-color-purple);
+  border-color: var(--accent-color-purple);
+  color: #ffffff;
+  font-weight: 600;
+}
+
+/* [추가] 기본 버튼 호버 효과 */
+.resetBtn:hover:not(.aiSearchActive) {
+  background-color: #444;
+}
+
+/* [추가] AI 버튼 호버 효과 */
+.aiSearchActive:hover {
+  background-color: #b049c1; /* 보라색의 밝은 버전 */
+  border-color: #b049c1;
+}
+
 .resultsHeader {
   display: flex;
   justify-content: space-between;

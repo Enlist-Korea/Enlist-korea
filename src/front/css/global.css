@@ -9,8 +9,9 @@
   --accent-color-blue: #0a84ff;
   --accent-color-orange: #ff9f0a;
   --accent-color-gray: #8e8e93;
+  --accent-color-purple: #9c27b0; /* AI 추천 검색용 */
   --shadow-color: rgba(0, 0, 0, 0.37);
-  --font-family: "Noto Sans KR", sans-serif;
+  --font-family: 'Noto Sans KR', sans-serif;
 }
 
 /* --- 기본 스타일 --- */
@@ -19,7 +20,6 @@ body {
   background-color: var(--bg-color);
   color: var(--primary-text-color);
   margin: 0;
-  /* padding: 2rem; */
 }
 
 a {
