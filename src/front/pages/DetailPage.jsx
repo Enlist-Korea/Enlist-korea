@@ -73,7 +73,7 @@ function TabNavigation({ activeTab, onTabClick }) {
         }`}
         onClick={() => onTabClick('mission')} // 부모에게 'mission' 클릭을 알림
       >
-        군사특기임무 및 설명
+        특기정보
       </button>
       <button
         type="button"
@@ -82,7 +82,7 @@ function TabNavigation({ activeTab, onTabClick }) {
         }`}
         onClick={() => onTabClick('plan')}
       >
-        이달의 모집 계획
+        당월의 모집 계획
       </button>
       <button
         type="button"
