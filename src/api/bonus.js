@@ -42,6 +42,7 @@ export async function fetchBonusRules(){
 }
 
 export function fetchRecruitmentStatus(params = {}) {
+  // 빈 값/undefined/null은 쿼리에서 제거
   const qs = new URLSearchParams(
     Object.entries(params).reduce((acc, [k, v]) => {
       if (v !== undefined && v !== null && String(v).trim() !== "") acc[k] = v;
@@ -51,11 +52,31 @@ export function fetchRecruitmentStatus(params = {}) {
 
   return http(`/api/recruitments/status${qs ? `?${qs}` : ""}`);
 }
+// ✅ 전체 병과 점수 계산
+export function requestBranchScores(body) {
+  // body = ScoreRequest (명세서)
+  return http("/api/score/branches", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}
+
+// ✅ 특정 병과 점수 계산 (상세 페이지용)
+export function requestBranchScoreById(criteriaId, body) {
+  return http(`/api/score/branch/${criteriaId}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+}
 
 /* =========================
- * 테스트용 더미 점수 생성기
+ * 테스트용 더미 응답 생성기
+ * - 백엔드가 없다면 여기서 점수 계산 흉내
  * ========================= */
 function mockCalcScores(payload){
+  // 아주 단순한 가중치로 섹션별 점수 흉내
   const qualScore =
     payload.qualificationCategory === "drive" ? 45 :
     payload.qualificationLabel?.includes("기사") ? 50 :
@@ -73,6 +94,7 @@ function mockCalcScores(payload){
     payload.absences <= 4 ? 4 :
     payload.absences <= 8 ? 3 : 2;
 
+  // 가산점: ()안 숫자 추출해서 더하고 최대 10 제한
   const pointOf = (txt) => {
     const m = /\((\d)점/.exec(txt || "");
     return m ? Number(m[1]) : 0;
@@ -85,9 +107,10 @@ function mockCalcScores(payload){
   return { qualScore, majorScore, attdScore, bonusScore, total };
 }
 
-// ✅ 전체 병과 점수 계산 (MOCK/실서버 자동 전환)
+// ▶ 백엔드 호출(목/실서버 자동 전환)
 export async function requestBranchScores(body){
   if (USE_MOCK){
+    // 300ms 지연 뒤 더미 응답
     await new Promise(r => setTimeout(r, 300));
     const s = mockCalcScores(body);
     return {
@@ -96,6 +119,7 @@ export async function requestBranchScores(body){
       ...s,
     };
   }
+  // 실제 서버
   return http("/api/score/branches",{
     method:"POST",
     headers:{ "Content-Type":"application/json" },
@@ -103,17 +127,9 @@ export async function requestBranchScores(body){
   });
 }
 
-// ✅ 특정 병과 점수 계산 (상세 페이지용)
-export function requestBranchScoreById(criteriaId, body) {
-  return http(`/api/score/branch/${criteriaId}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
-}
-
 /* =========================
  * 폼 프리필(테스트용)
+ * - 페이지 진입 시 자동 채워서 화면 확인
  * ========================= */
 export const mockPrefill = {
   qual:  { qCategory:"nat", qGrade:"기사이상", qRelation:"direct" },
