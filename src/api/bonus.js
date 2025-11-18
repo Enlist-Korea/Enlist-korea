@@ -1,5 +1,5 @@
 // src/api/bonus.js
-const BASE_URL = ""; // Vite 프록시 전제
+const BASE_URL = "https://oppositional-atonalistic-shawn.ngrok-free.dev"; // Vite 프록시 전제
 
 // ▶ 테스트용 목 스위치(백엔드와 연결시 false로 전환)
 export const USE_MOCK = false;

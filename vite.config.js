@@ -6,9 +6,11 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
+    port : 5177,
+    strictPort:true,
     proxy: {
       "/api": {
-        target: "http://localhost:8080", // ← 실제 백엔드 주소로 교체
+        target: "https://oppositional-atonalistic-shawn.ngrok-free.dev/api/crawl/scores", // ← 실제 백엔드 주소로 교체
         changeOrigin: true,
         // 필요 시 secure:false, rewrite 등 추가
       },
