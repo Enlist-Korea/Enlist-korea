@@ -136,6 +136,28 @@
   padding: 1rem;
 }
 
+/* ListPage.module.css 하단에 추가 */
+.primaryButton {
+  display: inline-block; /* block 대신 inline-block으로 변경 */
+  padding: 0.8rem 1.5rem; /* 헤더에 맞게 패딩 조정 */
+  text-align: center;
+  background: var(--accent-color-blue);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
+}
+
+.primaryButton:hover {
+  background-color: #0056b3;
+  transform: scale(1.02);
+}
+
 /* --- 반응형 디자인 --- */
 @media (max-width: 768px) {
   /* body 스타일은 global.css 또는 index.css로 이동하는 것을 권장합니다. */
