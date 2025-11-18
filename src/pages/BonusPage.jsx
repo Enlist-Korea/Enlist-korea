@@ -1,6 +1,6 @@
 // src/pages/BonusPage.jsx
 import React, { useEffect, useMemo, useState } from "react";
-import { fetchBonusRules, requestBranchScores } from "../api/bonus";
+import { fetchBonusRules, requestBranchScores, requestScore, USE_MOCK } from "../api/bonus";
 import BranchTabs from "../components/BranchTabs";
 import SubcatChips from "../components/SubcatChips";
 import ResultCard from "../components/ResultCard";
@@ -79,7 +79,7 @@ const getRuleFor = (branchLabel, subcatLabel) =>
  * 2) 테스트용 계산기 (팝업 저장 → 카드 점수 즉시 반영)
  *    - 백엔드 붙일 때는 USE_MOCK=false로 끄면 됨
  * ───────────────────────────────────────────── */
-const USE_MOCK = true;
+
 
 // (임시) 기술자격/면허 점수
 const calcQualMock = (f) => {
@@ -88,12 +88,23 @@ const calcQualMock = (f) => {
     "기사이상": 50, "산업기사": 45, "기능사": 40,
     "L6, L5": 50, "L4, L3": 45, "L2": 40,
     "공인": 30, "일반": 26,
-    "1종 대형/특수": 42, "기타(차량운전분야 특기 한함)": 40, // 운전면허는 50스케일에 맞춰 약식
+  
+    "대형/특수": 90,
+    "1종보통(수동)": 87,
     "미소지": 0,
   };
+
   const base = baseByGrade[f.qGrade] ?? 0;
-  const relAdj = f.qRelation === "indirect" ? -5 : 0; // 간접관련 -5 (임시)
-  return Math.max(0, Math.min(50, base + relAdj));      // 섹션 만점 50
+
+// 운전면허일 때는 관련도에 따른 감점 없음
+const relAdj =
+  f.qCategory === "drive"
+    ? 0
+    : (f.qRelation === "indirect" ? -5 : 0);
+
+
+return Math.max(0, Math.min(100, base + relAdj));   // 섹션 만점 100 기준(임시)
+
 };
 
 // (임시) 전공 점수
@@ -127,6 +138,57 @@ const calcBonusMock = (f) => {
   ].reduce((a,b)=>a+b,0);
   return Math.min(10, sum); // 섹션 만점 10
 };
+
+// 프론트 자격증 카테고리 
+const QUAL_CATEGORY_MAP = {
+  nat:   "NATIONAL_TECHNICAL", // 국가기술자격증
+  ws:    "NATIONAL_TECHNICAL", // 일학습병행자격증도 같은 Enum이면 이렇게
+  gen:   "GENERAL",            // 일반자격증
+  drive: "DRIVERS",            // 운전면허증
+  none:  "NONE",               // 자격 미소지
+};
+
+// 프론트 자격증 카테고리
+const QUAL_TYPE_MAP = {
+  nat:   "국가기술자격증",
+  ws:    "국가기술자격증",
+  gen:   "일반",
+  drive: "운전면허증",
+  none:  "",
+};
+
+// qRelation 값 
+const QUAL_RELATION_LABEL = {
+  direct: "직접관련",
+  indirect: "간접관련",
+};
+
+
+function buildQualDto(form) {
+  const category      = QUAL_CATEGORY_MAP[form.qCategory] || "NONE";
+  const typeCondition = QUAL_TYPE_MAP[form.qCategory]     || "";
+
+  // 운전면허(분류=drive)일 때: mainCondition = 자격등급, subCondition = ""
+  if (form.qCategory === "drive") {
+    return {
+      queryGroup:   "QUALIFICATION",
+      category,         // "DRIVERS"
+      typeCondition,    // "운전면허증"
+      mainCondition: form.qGrade,  // "대형/특수" 또는 "1종보통(수동)"
+      subCondition: "",
+    };
+  }
+
+  // 그 외 자격증: mainCondition = 관련도, subCondition = 자격등급
+  return {
+    queryGroup:   "QUALIFICATION",
+    category,                         // "NATIONAL_TECHNICAL", "GENERAL" 등
+    typeCondition,                    // "국가기술자격증", "일반" ...
+    mainCondition: QUAL_RELATION_LABEL[form.qRelation] || "직접관련",
+    subCondition:  form.qGrade,       // "기사이상", "산업기사", "기능사" 등
+  };
+}
+
 
 /* ─────────────────────────────────────────────
  * 3) BonusPage
@@ -180,6 +242,7 @@ export default function BonusPage() {
   useEffect(() => {
     if (currentBranch.subcats?.length) setSubcat(currentBranch.subcats[0].id);
   }, [branch]);
+  const majorDisabled = qualForm?.qCategory === "drive";
 
   const subcatLabel =
     currentBranch.subcats.find((s) => s.id === subcat)?.label || "";
@@ -189,27 +252,54 @@ export default function BonusPage() {
   const openSec  = (sec) => { setModalSection(sec); setModalOpen(true); };
   const closeSec = () => { setModalOpen(false); setModalSection(null); };
 
-  // 팝업 저장 → 해당 카드 점수 즉시 반영 (테스트용)
-  const handleSave = (section, form) => {
-    if (section === "qual")  {
-      setQualForm(form);
-      if (USE_MOCK) setQualScore(calcQualMock(form));
+  
+  // 팝업 저장 → 해당 카드 점수 즉시 반영
+const handleSave = async (section, form) => {
+  // 🔹 기술자격/면허
+  if (section === "qual") {
+    setQualForm(form);
+
+    if (USE_MOCK) {
+      // 목 모드: 기존 프론트 계산 그대로 사용
+      setQualScore(calcQualMock(form));
+    } else {
+      // 실서버 모드: /api/crawl/scores 로 점수 조회
+      try {
+        const dto   = buildQualDto(form);     // ScoreQueryDto 생성
+        const score = await requestScore(dto); // 백엔드 점수(Integer)
+        setQualScore(Number(score) || 0);
+      } catch (e) {
+        console.error(e);
+       
+        setMessage("자격증 점수 조회 중 오류가 발생했습니다.");
+      }
     }
-    if (section === "major") {
-      setMajorForm(form);
-      if (USE_MOCK) setMajorScore(calcMajorMock(form));
-    }
-    if (section === "attd")  {
-      setAttdForm(form);
-      if (USE_MOCK) setAttdScore(calcAttdMock(form));
-    }
-    if (section === "bonus") {
-      setBonusForm(form);
-      if (USE_MOCK) setBonusScore(calcBonusMock(form));
-    }
-    
-    closeSec();
-  };
+  }
+
+  //  전공
+  if (section === "major") {
+    setMajorForm(form);
+    if (USE_MOCK) setMajorScore(calcMajorMock(form));
+    // USE_MOCK=false일 때는 나중에 ACADEMIC 용 DTO 만들어서 연동 가능
+  }
+
+  //  출결
+  if (section === "attd") {
+    setAttdForm(form);
+    if (USE_MOCK) setAttdScore(calcAttdMock(form));
+    // USE_MOCK=false일 때는 ATTENDANCE DTO 만들어서 연동 가능
+  }
+
+  //  가산점
+  if (section === "bonus") {
+    setBonusForm(form);
+    if (USE_MOCK) setBonusScore(calcBonusMock(form));
+    // USE_MOCK=false일 때는 BONUS DTO 여러 개 호출해서 합산 가능
+  }
+
+  closeSec();
+};
+
 
   // 결과 확인(총점 계산)
   async function handleRequestScore() {
@@ -305,15 +395,25 @@ export default function BonusPage() {
   </div>
 
   <div className="card">
-    <h3 className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
-      <span>전공</span>
-      <div className="kpi"><div className="value">{majorScore.toFixed(2)}</div><div className="unit">점</div></div>
-    </h3>
-    <p className="desc">전공/학력 상태를 선택하세요.</p>
-    <button className="btn-primary" style={{ width:"100%" }} onClick={() => openSec("major")}>
-      입력하기
-    </button>
-  </div>
+  <h3 className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>
+    <span>전공</span>
+    <div className="kpi">
+      <div className="value">{majorScore.toFixed(2)}</div>
+      <div className="unit">점</div>
+    </div>
+  </h3>
+  <p className="desc">전공/학력 상태를 선택하세요.</p>
+  <button
+    className="btn-primary"
+    style={{ width:"100%" }}
+    onClick={() => openSec("major")}
+    disabled={qualForm?.qCategory === "drive"}   
+  >
+    입력하기
+  </button>
+
+</div>
+
 
   <div className="card">
     <h3 className="section-title" style={{ display:"flex", justifyContent:"space-between", alignItems:"center" }}>

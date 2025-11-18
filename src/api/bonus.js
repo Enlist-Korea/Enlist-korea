@@ -2,7 +2,7 @@
 const BASE_URL = ""; // Vite 프록시 전제
 
 // ▶ 테스트용 목 스위치(백엔드와 연결시 false로 전환)
-export const USE_MOCK = true;
+export const USE_MOCK = false;
 
 let AUTH_TOKEN = null;
 export function setAuthToken(t){ AUTH_TOKEN = t || null; }
@@ -16,6 +16,10 @@ async function http(path, { method="GET", headers={}, body } = {}){
   if (!res.ok) throw new Error(typeof data === "string" ? data : `HTTP ${res.status}`);
   return data;
 }
+
+
+
+
 
 // 군/세부 카테고리 (정적)
 export async function fetchBonusRules(){
@@ -118,3 +122,16 @@ export const mockPrefill = {
     bDrivequal:"해당 (2점)"
   }
 };
+
+export async function requestScore(dto) {
+ 
+  if (USE_MOCK) {
+    return 0;
+  }
+
+  return http("/api/crawl/scores", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(dto),
+  });
+}

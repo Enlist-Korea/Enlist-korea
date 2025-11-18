@@ -6,7 +6,7 @@ const GRADES = {
   nat:   ["기사이상", "산업기사", "기능사"],
   ws:    ["L6, L5", "L4, L3", "L2"],
   gen:   ["공인", "일반"],
-  drive: ["1종 대형/특수", "기타(차량운전분야 특기 한함)"],
+  drive: ["대형/특수", "1종보통(수동)"],
   none:  ["미소지"],
 };
 
@@ -106,13 +106,19 @@ export default function SectionModal({
 
         {showRelation && (
           <label className="field">
-            <span className="label">관련도</span>
-            <select className="select" value={form.qRelation} onChange={setVal("qRelation")}>
-              <option value="direct">직접관련</option>
-              <option value="indirect">간접관련</option>
-            </select>
-          </label>
-        )}
+          <span className="label">관련도</span>
+          <select
+            className="select"
+            value={form.qRelation}
+            onChange={setVal("qRelation")}
+            disabled={form.qCategory === "drive"} //  운전면허면 선택 불가
+          >
+          <option value="direct">직접관련</option>
+          <option value="indirect">간접관련</option>
+    </select>
+  </label>
+)}
+
       </div>
       <p className="help">* 분류를 바꾸면 자격등급 목록이 바뀝니다.</p>
     </section>
