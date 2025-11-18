@@ -14,6 +14,7 @@ import java.util.List;
 @RequestMapping("/api/recruitments")
 @RequiredArgsConstructor
 @Slf4j
+@CrossOrigin(origins = "*")
 public class RecruitmentController {
 
     private final RecruitmentService recruitmentService;

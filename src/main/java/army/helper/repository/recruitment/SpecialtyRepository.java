@@ -1,4 +1,4 @@
-package army.helper.repository;
+package army.helper.repository.recruitment;
 
 import army.helper.domain.recruitment_status.Branch;
 import army.helper.domain.recruitment_status.Specialty;

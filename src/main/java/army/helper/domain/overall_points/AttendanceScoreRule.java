@@ -5,9 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
-public class AttendanceDetailEntity {
+@Getter
+@NoArgsConstructor
+public class AttendanceScoreRule { //출결 점수 배점
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,5 +23,11 @@ public class AttendanceDetailEntity {
 
     @Column(nullable = false)
     private Integer attendanceScore; // 출결 최대 점수 (예: 5점)
+
+    @Builder
+    public AttendanceScoreRule(String attendanceCount, Integer attendanceScore) {
+        this.attendanceCount = attendanceCount;
+        this.attendanceScore = attendanceScore;
+    }
 }
 

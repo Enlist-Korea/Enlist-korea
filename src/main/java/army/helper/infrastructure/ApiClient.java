@@ -77,7 +77,7 @@ public class ApiClient {
      */
     public List<RequirementApiDto> fetchCurrentRecruitRequirements() {
         String url = String.format(
-                "%s/list?serviceKey=%s&pageNo=1&numOfRows=10",
+                "%s/list?serviceKey=%s&pageNo=1003&numOfRows=10",
                 apiProperties.requirement().baseUrl(),
                 apiProperties.requirement().serviceKey()
         );

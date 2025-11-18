@@ -1,5 +1,6 @@
 package army.helper;
 
+import lombok.Getter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -17,7 +18,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableJpaAuditing
 public class EnlistKoreaApplication implements ApplicationContextAware {
 
-	private static ApplicationContext applicationContext;
+	@Getter
+    private static ApplicationContext applicationContext;
 
 	public static void main(String[] args) {
 		SpringApplication.run(EnlistKoreaApplication.class, args);
@@ -28,7 +30,4 @@ public class EnlistKoreaApplication implements ApplicationContextAware {
 		EnlistKoreaApplication.applicationContext = applicationContext;
 	}
 
-	public static ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
 }

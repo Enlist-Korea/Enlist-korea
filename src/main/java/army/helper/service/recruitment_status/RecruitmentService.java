@@ -3,7 +3,7 @@ package army.helper.service.recruitment_status;
 import army.helper.domain.recruitment_status.Branch;
 import army.helper.domain.recruitment_status.Recruitment;
 import army.helper.dto.recruitment_status.RecruitmentStatusResponse;
-import army.helper.repository.RecruitmentRepository;
+import army.helper.repository.recruitment.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

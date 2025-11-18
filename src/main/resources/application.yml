@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/military
+    username: root
+    password: MyNewPassword123!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa: # ⬅️ 'spring' 블록의 하위로 올바르게 위치
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+logging:
+  level:
+    sun.rmi: OFF
+    javax.management: OFF
+
+crawling:
+  targets:
+    - type: "육군 기술행정병"  # ⬅️ 대시(-) 추가
+      url: "https://www.mma.go.kr/contents.do?mc=mma0000387"
+# ========================================================
+# 기타 API 설정은 그대로 유지합니다.
+# ========================================================
+military:
+  api:
+    status:
+      base-url: "https://apis.data.go.kr/1300000/MJBGJWJeopSuHH4"
+      serviceKey: "53ab31edea8a5edf9ab7d52a4d411c59fd5c89a2a92070193cf217327aa9663b"
+      timeout-ms: 5000
+    requirement:
+      base-url: "https://apis.data.go.kr/1300000/mjbJiWon"
+      serviceKey: "53ab31edea8a5edf9ab7d52a4d411c59fd5c89a2a92070193cf217327aa9663b"
+      timeout-ms: 5000
