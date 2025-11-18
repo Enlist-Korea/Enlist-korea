@@ -190,6 +190,147 @@ function buildQualDto(form) {
 }
 
 
+/* 학력 */
+
+const MAJOR_CATEGORY_MAP = {
+  univ4: "UNIVERSITY",
+  univ3: "JUNIOR_COLLEGE_3_YEAR",
+  univ2: "JUNIOR_COLLEGE_2_YEAR",
+  hs:    "HIGH_SCHOOL",
+  kp:    "KP_SCHOOL",
+  credit:"CREDIT_BANK"
+};
+
+// "4학년 수료이상" → main="4학년", sub="수료"
+function splitAcademicLevel(levelStr) {
+  const parts = levelStr.split(" ");
+  return {
+    main: parts[0],                         // "4학년"
+    sub:  parts[1]?.replace("이상","")||""  // "수료"
+  };
+}
+
+function buildAcademicDto(form) {
+  const category = MAJOR_CATEGORY_MAP[form.mBranch] || "UNIVERSITY";
+  const { main, sub } = splitAcademicLevel(form.mLevel);
+
+  return {
+    queryGroup:   "ACADEMIC",
+    category,     // UNIVERSITY, JUNIOR_COLLEGE_3_YEAR ...
+    mainCondition: main,  // "4학년"
+    subCondition:  sub,   // "수료"
+  };
+}
+
+/*출결*/
+
+const ATTEND_MAP = {
+  "0":   "0일",
+  "1-4": "1~4일",
+  "5-8": "5~8일",
+  "9+":  "9일 이상"
+};
+
+function buildAttendanceDto(form) {
+  const label = ATTEND_MAP[form.aAbsent] || "0일";
+
+  return {
+    queryGroup: "ATTENDANCE",
+    attendanceCount: label
+  };
+}
+
+
+/*가산점 */
+
+
+/*헌혈 */
+
+function buildBonusBloodDto(form) {
+  if (!form.bBlood) return null;
+  const count = form.bBlood.split(" ")[0];  // "1회"
+
+  return {
+    queryGroup: "BONUS",
+    category: "BLOOD_DONATION",
+    mainCondition: "헌혈(횟수)",
+    subCondition: count
+  };
+}
+
+
+/* 봉사활동 */
+
+function buildBonusVolunteerDto(form) {
+  if (!form.bVolunteer) return null;
+
+  return {
+    queryGroup: "BONUS",
+    category: "VOLUNTEER",
+    mainCondition: "봉사시간",
+    subCondition: form.bVolunteer
+  };
+}
+
+/* 다자녀 */
+
+function buildBonusMultiChildDto(form) {
+  if (!form.bMultipleChild) return null;
+
+  return {
+    queryGroup: "BONUS",
+    category: "MULTIPLE_CHILDREN",
+    mainCondition: "",
+    subCondition: ""
+  };
+}
+
+// 공통 함수(단일 체크형 가산점)
+function buildBonusSimpleDto(categoryEnum, enabled) {
+  if (!enabled) return null;
+  return {
+    queryGroup: "BONUS",
+    category: categoryEnum,
+    mainCondition: "",
+    subCondition: ""
+  };
+}
+
+// 3) 모집특기 경력
+function buildBonusSpecialtyExperience(form) {
+  return buildBonusSimpleDto("SPECIALTY_EXPERIENCE", form.bSpecialtyExperience);
+}
+
+// 4) 군 추천특기 지원자
+function buildBonusRecommendMilitary(form) {
+  return buildBonusSimpleDto("RECOMMEND_MILITARY", form.bRecommendMilitary);
+}
+
+// 5) 국가유공자 자녀
+function buildBonusChildrenOfNational(form) {
+  return buildBonusSimpleDto("CHILDREN_OF_NATIONAL", form.bChildrenOfNational);
+}
+
+// 6) 수급권자
+function buildBonusBeneficiary(form) {
+  return buildBonusSimpleDto("BENEFICIARY", form.bBeneficiary);
+}
+
+// 7) 현역병입영대상 판정자
+function buildBonusEligibleActiveDuty(form) {
+  return buildBonusSimpleDto("ELIGIBLE_ACTIVE_DUTY", form.bEligibleActiveDuty);
+}
+
+// 8) 국외이주자 중 현역병복무지원자
+function buildBonusImmigrantsActiveDuty(form) {
+  return buildBonusSimpleDto("IMMIGRANTS_ACTIVE_DUTY", form.bImmigrantsActiveDuty);
+}
+
+// 9) 군운전적성정밀검사 합격자
+function buildBonusDrivingAptitudeTest(form) {
+  return buildBonusSimpleDto("DRIVING_APTITUDE_TEST", form.bDrivingAptitudeTest);
+}
+
 /* ─────────────────────────────────────────────
  * 3) BonusPage
  * ───────────────────────────────────────────── */
@@ -278,25 +419,71 @@ const handleSave = async (section, form) => {
 
   //  전공
   if (section === "major") {
-    setMajorForm(form);
-    if (USE_MOCK) setMajorScore(calcMajorMock(form));
-    // USE_MOCK=false일 때는 나중에 ACADEMIC 용 DTO 만들어서 연동 가능
+      setMajorForm(form);
+
+
+    if (USE_MOCK) {
+      setMajorScore(0);
+    } else {
+      try {
+        const dto = buildAcademicDto(form);
+        const score = await requestScore(dto);
+        setMajorScore(Number(score) || 0);
+      } catch (e) { console.error(e); }
+    }
   }
 
   //  출결
   if (section === "attd") {
     setAttdForm(form);
-    if (USE_MOCK) setAttdScore(calcAttdMock(form));
-    // USE_MOCK=false일 때는 ATTENDANCE DTO 만들어서 연동 가능
-  }
+
+
+    if (USE_MOCK) {
+      setAttdScore(0);
+    } else {
+      try {
+        const dto = buildAttendanceDto(form);
+        const score = await requestScore(dto);
+        setAttdScore(Number(score) || 0);
+      } catch (e) { console.error(e); }
+    }
+}
 
   //  가산점
   if (section === "bonus") {
-    setBonusForm(form);
-    if (USE_MOCK) setBonusScore(calcBonusMock(form));
-    // USE_MOCK=false일 때는 BONUS DTO 여러 개 호출해서 합산 가능
-  }
+  setBonusForm(form);
 
+  if (USE_MOCK) {
+    setBonusScore(0);
+  } else {
+    const dtoList = [];
+
+    // 각 항목 DTO 생성
+    [
+      buildBonusBloodDto(form),
+      buildBonusVolunteerDto(form),
+      buildBonusSpecialtyExperience(form),
+      buildBonusRecommendMilitary(form),
+      buildBonusChildrenOfNational(form),
+      buildBonusMultipleChildren(form),
+      buildBonusBeneficiary(form),
+      buildBonusEligibleActiveDuty(form),
+      buildBonusImmigrantsActiveDuty(form),
+      buildBonusDrivingAptitudeTest(form)
+    ].forEach(dto => dto && dtoList.push(dto));
+
+    let total =0;
+    for (const dto of dtoList) {
+      try {
+        const s = await requestScore(dto);
+        total += Number(s) || 0;
+      } catch (e) {
+        console.error("가산점 조회 오류:", e);
+      }
+    }
+
+    setBonusScore(total);
+  };
   closeSec();
 };
 
@@ -466,4 +653,5 @@ const handleSave = async (section, form) => {
       />
     </div>
   );
+}
 }
