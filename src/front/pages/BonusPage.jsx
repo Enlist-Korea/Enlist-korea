@@ -554,6 +554,12 @@ export default function BonusPage() {
     if (section === 'qual') {
       setQualForm(form);
 
+      // 운전면허 선택 시 전공 정보/점수 초기화
+      if (form?.qCategory === 'drive') {
+        setMajorForm(null);
+        setMajorScore(0);
+      }
+
       if (USE_MOCK) {
         setQualScore(calcQualMock(form));
       } else {
