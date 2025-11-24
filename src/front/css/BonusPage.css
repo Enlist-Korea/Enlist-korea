@@ -1,0 +1,403 @@
+/* src/front/css/BonusPage.css */
+
+/* [중요] :root 대신 .bonus-wrapper 클래스 하위에 변수를 선언하여 
+  메인 프로젝트의 global.css 변수와 충돌을 방지합니다.
+*/
+.bonus-wrapper {
+  --calc-bg: #0b0c10;
+  --calc-text: #e6e8ec;
+  --calc-muted: #9aa0a6;
+  --calc-card: #121319;
+  --calc-border: #23252e;
+  --calc-primary: #5b7cfa;
+  --calc-primary-weak: rgba(91, 124, 250, 0.14);
+  --calc-ring: #6b8cff;
+
+  /* 폰트는 메인 프로젝트의 것을 상속받거나 여기서 재정의 */
+  font-family:
+    ui-sans-serif, system-ui, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  line-height: 1.5;
+  color: var(--calc-text);
+  background-color: var(--calc-bg);
+
+  /* 페이지 전체 크기 및 중앙 정렬 확보 */
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 전역 초기화(*, html, body) 제거 -> 메인 프로젝트 global.css 따름 */
+
+/* 모든 클래스 앞에 .bonus-wrapper를 붙여줍니다 */
+
+.bonus-wrapper * {
+  box-sizing: border-box;
+}
+
+.bonus-wrapper button,
+.bonus-wrapper a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bonus-wrapper img,
+.bonus-wrapper video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* --- 컨테이너 --- */
+.bonus-wrapper .container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 16px;
+}
+
+@media (max-width: 560px) {
+  .bonus-wrapper .container {
+    padding: 24px 14px;
+  }
+}
+
+/* --- 헤더 --- */
+.bonus-wrapper .header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.bonus-wrapper .title {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: clamp(20px, 3.2vw, 28px);
+  color: #fff;
+  margin: 0;
+}
+.bonus-wrapper .desc {
+  margin-top: 6px;
+  color: var(--calc-muted);
+  font-size: clamp(12px, 2.8vw, 13px);
+}
+
+.bonus-wrapper .btn-reset {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 14px;
+  border: 1px solid var(--calc-border);
+  background: transparent;
+  color: var(--calc-text);
+  cursor: pointer;
+}
+.bonus-wrapper .btn-reset:hover {
+  background: #0f1016;
+}
+
+/* --- 섹션/그리드 --- */
+.bonus-wrapper .section {
+  margin-bottom: 24px;
+}
+.bonus-wrapper .section-title {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.bonus-wrapper .grid {
+  display: grid;
+  gap: 12px;
+}
+.bonus-wrapper .grid.cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.bonus-wrapper .grid.cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.bonus-wrapper .grid.cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (max-width: 1024px) {
+  .bonus-wrapper .grid.cols-4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .bonus-wrapper .grid.cols-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .bonus-wrapper .grid.cols-4,
+  .bonus-wrapper .grid.cols-3,
+  .bonus-wrapper .grid.cols-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bonus-wrapper .grid.cards-2x2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  align-items: start;
+}
+@media (max-width: 880px) {
+  .bonus-wrapper .grid.cards-2x2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- 탭/칩 --- */
+.bonus-wrapper .tab {
+  padding: 16px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--calc-border);
+  background: var(--calc-card);
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  width: 100%;
+}
+.bonus-wrapper .tab:focus {
+  outline: 2px solid var(--calc-ring);
+}
+.bonus-wrapper .tab.is-active {
+  outline: 2px solid var(--calc-ring);
+  background: var(--calc-primary-weak);
+  border-color: var(--calc-primary);
+  color: #cbd6ff;
+}
+
+.bonus-wrapper .chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.bonus-wrapper .chip {
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--calc-border);
+  background: var(--calc-card);
+  font-size: 13px;
+  cursor: pointer;
+  color: #fff;
+}
+.bonus-wrapper .chip.is-active {
+  background: var(--calc-primary-weak);
+  border-color: var(--calc-primary);
+  color: #cbd6ff;
+}
+
+/* --- 카드/폼/버튼 --- */
+.bonus-wrapper .card {
+  background: var(--calc-card);
+  border: 1px solid var(--calc-border);
+  border-radius: 18px;
+  padding: 16px;
+}
+
+.bonus-wrapper .form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+@media (max-width: 800px) {
+  .bonus-wrapper .form {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bonus-wrapper .field {
+  display: grid;
+  gap: 6px;
+}
+.bonus-wrapper .label {
+  font-size: 12px;
+  color: var(--calc-muted);
+}
+.bonus-wrapper .select,
+.bonus-wrapper .input {
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid var(--calc-border);
+  background: #0f1117;
+  color: var(--calc-text);
+  padding: 0 12px;
+  width: 100%;
+}
+.bonus-wrapper .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bonus-wrapper .btn-primary {
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  background: var(--calc-primary);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+}
+.bonus-wrapper .btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- KPI/결과 --- */
+.bonus-wrapper .kpi {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.bonus-wrapper .kpi .value {
+  font-size: 28px;
+  font-weight: 800;
+  color: #fff;
+}
+.bonus-wrapper .kpi .unit {
+  font-size: 13px;
+  color: var(--calc-muted);
+}
+
+.bonus-wrapper .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #1e2029;
+}
+.bonus-wrapper .row:last-child {
+  border-bottom: none;
+}
+
+.bonus-wrapper .result-card {
+  width: 100%;
+  max-width: 420px;
+  margin: 10px auto 0;
+  align-self: start;
+  justify-self: center;
+}
+@media (min-width: 1025px) {
+  .bonus-wrapper .result-card {
+    max-width: calc((100% - 30px) / 4);
+  }
+}
+@media (max-width: 1024px) {
+  .bonus-wrapper .result-card {
+    max-width: calc((100% - 10px) / 2);
+  }
+}
+@media (max-width: 560px) {
+  .bonus-wrapper .result-card {
+    max-width: 100%;
+  }
+}
+
+/* --- 모달 --- */
+.bonus-wrapper .no-scroll {
+  overflow: hidden;
+}
+.bonus-wrapper .modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+.bonus-wrapper .modal-backdrop.is-open {
+  display: flex;
+}
+.bonus-wrapper .modal {
+  width: min(720px, 92vw);
+  max-height: 92vh;
+  overflow: auto;
+  background: var(--calc-card);
+  border: 1px solid var(--calc-border);
+  border-radius: 18px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+}
+.bonus-wrapper .modal-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--calc-border);
+  background: var(--calc-card);
+}
+.bonus-wrapper .modal-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+}
+.bonus-wrapper .modal-close {
+  background: transparent;
+  border: none;
+  color: var(--calc-muted);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.bonus-wrapper .modal-body {
+  padding: 16px;
+}
+.bonus-wrapper .modal-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  padding: 14px 16px;
+  border-top: 1px solid var(--calc-border);
+  background: var(--calc-card);
+}
+.bonus-wrapper .btn {
+  height: 40px;
+  border-radius: 12px;
+  padding: 0 14px;
+  border: 1px solid var(--calc-border);
+  background: #0f1117;
+  color: var(--calc-text);
+  cursor: pointer;
+}
+.bonus-wrapper .btn:hover {
+  filter: brightness(1.05);
+}
+.bonus-wrapper .btn.primary {
+  background: var(--calc-primary);
+  color: #fff;
+  border-color: transparent;
+}
+
+/* --- 브랜치 탭 특수 --- */
+.bonus-wrapper [role='tablist'][aria-label='군 분류'],
+.bonus-wrapper #branchTabs {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 10px;
+}
+@media (max-width: 1024px) {
+  .bonus-wrapper [role='tablist'][aria-label='군 분류'] {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 560px) {
+  .bonus-wrapper [role='tablist'][aria-label='군 분류'] {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+.bonus-wrapper [role='tablist'][aria-label='군 분류'] .tab {
+  white-space: nowrap;
+  padding: 14px 8px;
+  font-size: clamp(12px, 3.2vw, 16px);
+}

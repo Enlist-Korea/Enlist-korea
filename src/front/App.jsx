@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import ListPage from './pages/ListPage';
 import DetailPage from './pages/DetailPage';
+import BonusPage from './pages/BonusPage';
 
 // react-router-dom의 Routes와 Route를 사용해 URL 경로와 컴포넌트를 매핑
 function App() {
@@ -15,6 +16,8 @@ function App() {
       (예: /details/1, /details/abc).
       이런 형태의 경로로 접속하면 DetailPage 컴포넌트를 보여줌 */}
       <Route path="/details/:id" element={<DetailPage />} />
+      {/* [추가] 가산점 계산기 라우트 추가 */}
+      <Route path="/calc-page" element={<BonusPage />} />
     </Routes>
   );
 }
