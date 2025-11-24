@@ -6,6 +6,7 @@ import styles from '../css/ListPage.module.css';
 import getKoreanForceName from '../utils/mappingForceName';
 import { getExpandedKeywords } from '../utils/searchKeywords';
 import { Link } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 export default function ListPage() {
   // --- 상태 관리 ---
@@ -158,7 +159,9 @@ export default function ListPage() {
         }}
       >
         <div>
-          <h1>병무청 모집병 조회</h1>
+          {/* [수정 전] <h1>병무청 모집병 조회</h1> */}
+          {/* [수정 후] 이미지를 넣고 스타일 클래스 적용 */}
+          <img src={logo} alt="Enlist-Korea" className={styles.logo} />
           <p>현재 지원 가능한 모집병 공고를 확인하세요.</p>
         </div>
         {/* 종합 점수(가산점) 계산기 버튼 */}

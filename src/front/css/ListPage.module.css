@@ -13,6 +13,14 @@
   color: #fff;
 }
 
+/* [추가] 로고 이미지 스타일 */
+.logo {
+  height: 50px; /* 원하는 높이로 조절 (예: 50px ~ 80px) */
+  width: auto; /* 비율 유지 */
+  display: block;
+  margin-bottom: 0.5rem; /* 아래 설명 텍스트와의 간격 */
+}
+
 .pageHeader p {
   max-width: fit-content;
   font-size: 1rem;
