@@ -548,7 +548,6 @@ export default function BonusPage() {
   };
 
   // 팝업 저장 → 해당 카드 점수 즉시 반영
-  // 팝업 저장 → 해당 카드 점수 즉시 반영
   const handleSave = async (section, form) => {
     // 🔹 기술자격/면허
     if (section === 'qual') {
@@ -845,7 +844,10 @@ export default function BonusPage() {
               onClick={() => openSec('major')}
               disabled={qualForm?.qCategory === 'drive'}
             >
-              입력하기
+              {/* 운전면허(drive) 선택 여부에 따라 버튼 텍스트 변경 */}
+              {qualForm?.qCategory === 'drive'
+                ? '운전면허 선택 시 전공 점수는 0점으로 계산합니다.'
+                : '입력하기'}
             </button>
           </div>
 
