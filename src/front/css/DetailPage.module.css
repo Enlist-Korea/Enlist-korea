@@ -87,7 +87,7 @@
 /* 반응형 미디어 쿼리 */
 @media (max-width: 768px) {
   .pageContainer {
-    padding: 1rem;
+    padding: 0.5rem;
   }
   .tabContentWrapper {
     padding: 0.5rem;

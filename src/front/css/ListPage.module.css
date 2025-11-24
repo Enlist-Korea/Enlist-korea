@@ -5,31 +5,19 @@
   padding: 0 1rem 1rem 1rem;
 }
 
-/* pageHeader에 flex 레이아웃 속성 추가 */
-.pageHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center; /* 수직 중앙 정렬 */
-  gap: 1rem; /* 제목과 버튼 사이 간격 */
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap; /* 공간 부족 시 줄바꿈 허용 */
-}
-
 .pageHeader h1 {
-  /* max-width: fit-content; 제거 (줄바꿈 자연스럽게 하기 위함) */
+  max-width: fit-content;
   font-size: 2rem;
   font-weight: 700;
-  margin: 0.5rem 0 0.5rem 0; /* 마진 정리 */
+  margin: 2;
   color: #fff;
-  line-height: 1.2; /* 줄간격 조정 */
 }
 
 .pageHeader p {
-  /* max-width: fit-content; */
+  max-width: fit-content;
   font-size: 1rem;
   color: var(--secondary-text-color);
-  /* margin-top: 0.5rem; */
-  margin: 0;
+  margin-top: 0.5rem;
 }
 
 /* --- 필터 컨트롤 --- */
@@ -108,7 +96,7 @@
   background-color: #444;
 }
 
-/* AI 버튼 호버 효과 */
+/* [추가] AI 버튼 호버 효과 */
 .aiSearchActive:hover {
   background-color: #b049c1; /* 보라색의 밝은 버전 */
   border-color: #b049c1;
@@ -148,6 +136,7 @@
   padding: 1rem;
 }
 
+/* ListPage.module.css 하단에 추가 */
 .primaryButton {
   display: inline-block; /* block 대신 inline-block으로 변경 */
   padding: 0.8rem 1.5rem; /* 헤더에 맞게 패딩 조정 */
@@ -171,18 +160,10 @@
 
 /* --- 반응형 디자인 --- */
 @media (max-width: 768px) {
-  /* 헤더를 세로로 배치 */
-  .pageHeader {
-    flex-direction: column;
-    align-items: flex-start; /* 왼쪽 정렬 */
-    gap: 1.5rem;
-  }
-
-  /* 모바일에서 버튼을 꽉 차게 보여주거나, 왼쪽 정렬 */
-  .primaryButton {
-    width: 50%; /* 버튼 가로로 채우는 비율 */
-    box-sizing: border-box;
-  }
+  /* body 스타일은 global.css 또는 index.css로 이동하는 것을 권장합니다. */
+  /* body {
+    padding: 1rem;
+  } */
 
   .filterControls {
     /* flex-direction: column; */
