@@ -175,7 +175,7 @@ export default function ListPage() {
             // placeholder="특기명 검색..." // [수정] item.name 기준 검색
             placeholder={
               isBroadSearch
-                ? '예: "운전" 또는 "사격" (AI 추천)'
+                ? '예: "운전" 또는 "사격" (광범위 검색)'
                 : '정확한 특기명 검색...'
             }
             value={searchTermFilteredValue}
@@ -197,7 +197,7 @@ export default function ListPage() {
                 : '특기명에 포함된 단어만 정확히 검색합니다.'
             }
           >
-            검색: {isBroadSearch ? 'AI 추천' : '특기명'}
+            검색 모드: {isBroadSearch ? '광범위 검색' : '특기명'}
           </button>
 
           {/* 군종 필터 */}
