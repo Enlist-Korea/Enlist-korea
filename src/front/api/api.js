@@ -3,8 +3,10 @@ import { getRecruitmentStatus } from '../utils/dateUtils';
 import mmaData from '../data/mmaData.json';
 
 // 백엔드 실행 시 백엔드 주소 수정 !!!!!!!!!!
-const BACKEND_API_URL =
-  'https://oppositional-atonalistic-shawn.ngrok-free.dev/api/recruitments/status';
+// const BACKEND_API_URL =
+// 'https://oppositional-atonalistic-shawn.ngrok-free.dev/api/recruitments/status';
+// 로컬 백엔드 주소
+const BACKEND_API_URL = 'http://localhost:8080/api/recruitments/status';
 
 /**
  * HTML 태그를 제거하고 텍스트만 추출하는 헬퍼 함수
