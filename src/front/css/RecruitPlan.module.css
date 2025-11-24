@@ -1,0 +1,111 @@
+/* 컨테이너: 반응형 그리드 (모바일 1열, 태블릿 이상 2열) */
+.planGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .planGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 카드 본체 스타일 */
+.planCard {
+  background-color: var(--card-bg-color, #1e1e24);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.planCard:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-color-blue, #0a84ff);
+}
+
+/* 카드 헤더 (뱃지 + 모집명) */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background-color: var(--accent-color-green, #28a745);
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-text-color, #e0e0e0);
+  margin: 0 0 0.25rem 0;
+}
+
+/* 정보 리스트 (접수기간, 발표일 등) */
+.infoList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--secondary-text-color, #aaa);
+}
+
+.infoItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; /* 긴 텍스트 줄바꿈 대응 */
+}
+
+.label {
+  font-weight: 600;
+  min-width: 80px; /* 라벨 너비 고정 */
+  margin-right: 0.5rem;
+}
+
+.value {
+  color: var(--primary-text-color, #fff);
+  text-align: right;
+  word-break: keep-all; /* 단어 단위 줄바꿈 */
+  line-height: 1.4;
+}
+
+/* 하단 강조 정보 (입영월, 인원) */
+.cardFooter {
+  margin-top: auto; /* 카드 하단 고정 */
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footerItem {
+  text-align: center;
+}
+
+.footerLabel {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--secondary-text-color);
+  margin-bottom: 0.2rem;
+}
+
+.footerValue {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--accent-color-blue, #0a84ff);
+}

@@ -4,6 +4,8 @@ import styles from '../css/DetailPage.module.css';
 import useSpecialtyData from '../hooks/useSpecialtyData';
 import mmaNotices from '../data/mmaNotices.json';
 
+import RecruitPlanView from '../components/RecruitPlanView';
+
 /**
  * [DetailPage 컴포넌트]
  * 탭 상태(activeTab)를 추가로 관리
@@ -115,7 +117,7 @@ function TabContent({ activeTab, data, notices }) {
         <HtmlContentView htmlContent={`정보 업데이트: ${data.lastUpdateDay}`} />
       </div>
 
-      <div
+      {/* <div
         className={`${styles.tabPane} ${
           activeTab === 'plan' ? styles.active : ''
         }`}
@@ -124,6 +126,15 @@ function TabContent({ activeTab, data, notices }) {
           htmlContent={data.planHtml}
           fallbackText="모집 계획 정보가 없습니다."
         />
+      </div> */}
+      {/* 2. 모집 계획 탭 (수정됨) */}
+      <div
+        className={`${styles.tabPane} ${
+          activeTab === 'plan' ? styles.active : ''
+        }`}
+      >
+        {/* 기존 HtmlContentView 대신 카드 뷰 컴포넌트 사용 */}
+        <RecruitPlanView />
       </div>
 
       <div

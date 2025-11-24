@@ -27,6 +27,15 @@ export const PATH = {
     "data",
     "mmaNotices.json",
   ),
+  // [추가] 모집 계획 데이터 저장 경로
+  MMA_RECRUIT_OUT: path.join(
+    __dirname,
+    "..",
+    "src",
+    "front",
+    "data",
+    "recruitPlan.json",
+  ),
 };
 
 // --- 병무청 링크 ---
