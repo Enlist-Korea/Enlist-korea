@@ -764,7 +764,7 @@ export default function BonusPage() {
         {/* 헤더 */}
         <div className="header">
           <div>
-            <h1 className="title">군 가산점 계산</h1>
+            <h1 className="title">군 종합점수 계산기</h1>
             {message && (
               <p className="desc" style={{ color: '#cbd6ff' }}>
                 {message}
