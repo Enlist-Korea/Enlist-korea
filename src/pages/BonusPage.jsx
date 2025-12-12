@@ -529,6 +529,10 @@ export default function BonusPage() {
     if (currentBranch.subcats?.length) setSubcat(currentBranch.subcats[0].id);
   }, [branch]);
   const majorDisabled = qualForm?.qCategory === "drive";
+  const resultDisabled =
+    !qualForm ||
+    !attdForm ||
+    (!majorForm && !majorDisabled); // 운전면허(qCategory === 'drive')일 때는 majorForm 없어도 통과
 
   const subcatLabel =
     currentBranch.subcats.find((s) => s.id === subcat)?.label || "";
@@ -550,7 +554,10 @@ const handleSave = async (section, form) => {
   // 🔹 기술자격/면허
   if (section === "qual") {
     setQualForm(form);
-
+    if (form?.qCategory === 'drive') {
+      setMajorForm(null);
+      setMajorScore(0);
+    }
     if (USE_MOCK) {
       setQualScore(calcQualMock(form));
     } else {
@@ -869,7 +876,7 @@ const handleSave = async (section, form) => {
           subcatLabel={subcatLabel}
           total={total}
           onCompute={handleRequestScore}
-          disabled={!qualForm || !majorForm || !attdForm}
+          disabled={resultDisabled}
         />
       </section>
 
